@@ -1,0 +1,50 @@
+.sidebar-header {
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    background-color: #34495e;
+}
+
+.sidebar-buttons {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+.sidebar-buttons button {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #34495e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.sidebar-buttons button:hover {
+    background-color: #1abc9c;
+}
+
+.recent-sheets {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #34495e;
+    border-radius: 5px;
+}
+
+.recent-sheet {
+    background-color: #1abc9c;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.recent-sheet:hover {
+    background-color: #16a085;
+}
