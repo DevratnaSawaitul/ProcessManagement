@@ -15,6 +15,7 @@ public class test {
 		// Create a response object
 		ResponseMessage responseMessage = new ResponseMessage("hi there it!");
 
+		
 		// Return the response as JSON
 		return Response.ok(responseMessage).build();
 	}
