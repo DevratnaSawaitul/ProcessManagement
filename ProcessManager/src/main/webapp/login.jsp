@@ -23,7 +23,8 @@
         <div class="form-group password-toggle">
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Enter password" oninput="validateInputs()" />
-            <span id="toggleIcon" class="toggle-icon" onclick="togglePasswordVisibility()"> <font face="Arial">&#x1f604;</font>
+            <span id="toggleIcon" class="toggle-icon" onclick="togglePasswordVisibility()"> 
+                <font face="Arial">&#x1f604;</font>
             </span>
             <div id="passwordError" class="error"></div>
         </div>

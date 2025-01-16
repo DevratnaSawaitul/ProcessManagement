@@ -4,7 +4,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: url('images/background.jpg') no-repeat center center fixed;
+    background: url('../res/background.jpg') no-repeat center center fixed; /* Adjust path as needed */
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -32,7 +32,7 @@ h2 {
 }
 
 .form-group label {
-    display: block; /* Ensures the label stays above the input field */
+    display: block;
     margin-bottom: 5px;
     color: #555;
 }
@@ -46,19 +46,17 @@ h2 {
     font-size: 16px;
 }
 
-/* For password input with toggle icon */
 .password-toggle {
     position: relative;
 }
 
 .password-toggle input {
-    padding-right: 35px; /* Space for the toggle icon */
+    padding-right: 35px;
 }
 
-/* Show/hide toggle icon alignment */
 .password-toggle .toggle-icon {
     position: absolute;
-    top: 50%; /* Centers the icon vertically */
+    top: 50%;
     right: 10px;
     transform: translateY(-50%);
     cursor: pointer;
@@ -71,7 +69,7 @@ h2 {
     color: red;
     font-size: 12px;
     margin-top: 5px;
-    min-height: 16px; /* Reserves space for the error message */
+    min-height: 16px;
 }
 
 .button {
