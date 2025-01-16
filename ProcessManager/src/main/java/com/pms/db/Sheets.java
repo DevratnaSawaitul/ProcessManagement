@@ -14,30 +14,30 @@ public class Sheets {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long sheetId;
-	private String fileName;
+	private Long sheet_id;
+	private String file_name;
 	private String version;
 	private String date;
 	private String department;
-	private String designNo;
+	private String design_no;
 	private String floor;
-	private String dateOfLastUpdate;
-	private String lastUpdatedBy;
+	private String date_of_last_update;
+	private String last_updated_by;
 
 	public Long getSheetId() {
-		return sheetId;
+		return sheet_id;
 	}
 
 	public void setSheetId(Long sheetId) {
-		this.sheetId = sheetId;
+		this.sheet_id = sheetId;
 	}
 
 	public String getFileName() {
-		return fileName;
+		return file_name;
 	}
 
 	public void setFileName(String fileName) {
-		this.fileName = fileName;
+		this.file_name = fileName;
 	}
 
 	public String getVersion() {
@@ -65,11 +65,11 @@ public class Sheets {
 	}
 
 	public String getDesignNo() {
-		return designNo;
+		return design_no;
 	}
 
 	public void setDesignNo(String designNo) {
-		this.designNo = designNo;
+		this.design_no = designNo;
 	}
 
 	public String getFloor() {
@@ -81,27 +81,27 @@ public class Sheets {
 	}
 
 	public String getDateOfLastUpdate() {
-		return dateOfLastUpdate;
+		return date_of_last_update;
 	}
 
 	public void setDateOfLastUpdate(String dateOfLastUpdate) {
-		this.dateOfLastUpdate = dateOfLastUpdate;
+		this.date_of_last_update = dateOfLastUpdate;
 	}
 
 	public String getLastUpdatedBy() {
-		return lastUpdatedBy;
+		return last_updated_by;
 	}
 
 	public void setLastUpdatedBy(String lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
+		this.last_updated_by = lastUpdatedBy;
 	}
 
 	@Override
 	public String toString() {
-		return "Sheets{" + "sheetId=" + sheetId + ", fileName='" + fileName + '\'' + ", version='" + version + '\''
-				+ ", date='" + date + '\'' + ", department='" + department + '\'' + ", designNo='" + designNo + '\''
-				+ ", floor='" + floor + '\'' + ", dateOfLastUpdate='" + dateOfLastUpdate + '\'' + ", lastUpdatedBy='"
-				+ lastUpdatedBy + '\'' + '}';
+		return "Sheets{" + "sheetId=" + sheet_id + ", fileName='" + file_name + '\'' + ", version='" + version + '\''
+				+ ", date='" + date + '\'' + ", department='" + department + '\'' + ", designNo='" + design_no + '\''
+				+ ", floor='" + floor + '\'' + ", dateOfLastUpdate='" + date_of_last_update + '\'' + ", lastUpdatedBy='"
+				+ last_updated_by + '\'' + '}';
 	}
 
 	public Sheets[] retrieveAllWhere(String condition) {
@@ -129,11 +129,11 @@ public class Sheets {
 			query.setParameter("version", this.version);
 			query.setParameter("date", this.date);
 			query.setParameter("department", this.department);
-			query.setParameter("design_no", this.designNo);
+			query.setParameter("design_no", this.design_no);
 			query.setParameter("floor", this.floor);
-			query.setParameter("date_of_last_update", this.dateOfLastUpdate);
-			query.setParameter("last_updated_by", this.lastUpdatedBy);
-			query.setParameter("file_name", this.fileName);
+			query.setParameter("date_of_last_update", this.date_of_last_update);
+			query.setParameter("last_updated_by", this.last_updated_by);
+			query.setParameter("file_name", this.file_name);
 
 			int status = query.executeUpdate();
 			transaction.commit();

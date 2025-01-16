@@ -14,24 +14,24 @@ public class Skills {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long skillId;
-	private String skillName;
+	private Long skill_id;
+	private String skill_name;
 	private Boolean active;
 
 	public Long getSkillId() {
-		return skillId;
+		return skill_id;
 	}
 
 	public void setSkillId(Long skillId) {
-		this.skillId = skillId;
+		this.skill_id = skillId;
 	}
 
 	public String getSkillName() {
-		return skillName;
+		return skill_name;
 	}
 
 	public void setSkillName(String skillName) {
-		this.skillName = skillName;
+		this.skill_name = skillName;
 	}
 
 	public Boolean getActive() {
@@ -44,7 +44,7 @@ public class Skills {
 
 	@Override
 	public String toString() {
-		return "Skills{" + "skillId=" + skillId + ", skillName='" + skillName + '\'' + ", active=" + active + '}';
+		return "Skills{" + "skillId=" + skill_id + ", skillName='" + skill_name + '\'' + ", active=" + active + '}';
 	}
 
 	public Skills[] retrieveAllWhere(String condition) {
@@ -83,7 +83,7 @@ public class Skills {
 		try {
 			Query query = session.createQuery(
 					"update Skills set active = :active where skill_name = :skill_name");
-			query.setParameter("skill_name", this.skillName);
+			query.setParameter("skill_name", this.skill_name);
 			query.setParameter("active", this.active);
 
 			int status = query.executeUpdate();

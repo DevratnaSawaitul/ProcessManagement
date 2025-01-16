@@ -14,24 +14,24 @@ import com.pms.util.HibernateUtil;
 public class Process {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long processId;
-	private String processName;
+	private Long process_id;
+	private String process_name;
 	private Boolean active;
 
 	public Long getProcessId() {
-		return processId;
+		return process_id;
 	}
 
 	public void setProcessId(Long processId) {
-		this.processId = processId;
+		this.process_id = processId;
 	}
 
 	public String getProcessName() {
-		return processName;
+		return process_name;
 	}
 
 	public void setProcessName(String processName) {
-		this.processName = processName;
+		this.process_name = processName;
 	}
 
 	public Boolean getActive() {
@@ -44,7 +44,7 @@ public class Process {
 
 	@Override
 	public String toString() {
-		return "Process{" + "processId=" + processId + ", processName='" + processName + '\'' + ", active=" + active
+		return "Process{" + "processId=" + process_id + ", processName='" + process_name + '\'' + ", active=" + active
 				+ '}';
 	}
 
@@ -84,7 +84,7 @@ public class Process {
 			Query query = session.createQuery(
 					"update Process set active = :active where processName = :processName");
 			query.setParameter("active", this.active);
-			query.setParameter("skill_name", this.processName);
+			query.setParameter("skill_name", this.process_name);
 
 			int status = query.executeUpdate();
 			transaction.commit();

@@ -14,105 +14,82 @@ public class Steps {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long stepId;
-
-	@Column(name = "file_name", nullable = false)
-	private String fileName;
-
-	@Column(name = "process_name", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
-	private String processName;
-
-	@Column(name = "subprocess_name", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
-	private String subprocessName;
-
-	@Column(name = "step_number", nullable = false)
-	private int stepNumber;
-
-	@Column(name = "tool_name", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
-	private String toolName;
-
-	@Column(name = "tool_spec", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
-	private String toolSpec;
-
-	@Column(name = "special_instruction", nullable = false, columnDefinition = "TEXT DEFAULT ''")
-	private String specialInstruction;
-
-	@Column(name = "skill", nullable = false, columnDefinition = "VARCHAR(50) DEFAULT ''")
+	private Long step_id;
+	private String file_name;
+	private String process_name;
+	private String subprocess_name;
+	private int step_number;
+	private String tool_name;
+	private String tool_spec;
+	private String special_instruction;
 	private String skill;
-
-	@Column(name = "time_minutes", nullable = false)
-	private int timeMinutes;
-
-	@Column(name = "image_url", columnDefinition = "TEXT DEFAULT ''")
-	private String imageUrl;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "sheet_process_id")
-	private SheetProcess sheetProcess;
+	private int time_minutes;
+	private String image_url;
+	private Long sheet_process_id;
 
 	// Getters and Setters
 	public Long getStepId() {
-		return stepId;
+		return step_id;
 	}
 
 	public void setStepId(Long stepId) {
-		this.stepId = stepId;
+		this.step_id = stepId;
 	}
 
 	public String getFileName() {
-		return fileName;
+		return file_name;
 	}
 
 	public void setFileName(String fileName) {
-		this.fileName = fileName;
+		this.file_name = fileName;
 	}
 
 	public String getProcessName() {
-		return processName;
+		return process_name;
 	}
 
 	public void setProcessName(String processName) {
-		this.processName = processName;
+		this.process_name = processName;
 	}
 
 	public String getSubprocessName() {
-		return subprocessName;
+		return subprocess_name;
 	}
 
 	public void setSubprocessName(String subprocessName) {
-		this.subprocessName = subprocessName;
+		this.subprocess_name = subprocessName;
 	}
 
 	public int getStepNumber() {
-		return stepNumber;
+		return step_number;
 	}
 
 	public void setStepNumber(int stepNumber) {
-		this.stepNumber = stepNumber;
+		this.step_number = stepNumber;
 	}
 
 	public String getToolName() {
-		return toolName;
+		return tool_name;
 	}
 
 	public void setToolName(String toolName) {
-		this.toolName = toolName;
+		this.tool_name = toolName;
 	}
 
 	public String getToolSpec() {
-		return toolSpec;
+		return tool_spec;
 	}
 
 	public void setToolSpec(String toolSpec) {
-		this.toolSpec = toolSpec;
+		this.tool_spec = toolSpec;
 	}
 
 	public String getSpecialInstruction() {
-		return specialInstruction;
+		return special_instruction;
 	}
 
 	public void setSpecialInstruction(String specialInstruction) {
-		this.specialInstruction = specialInstruction;
+		this.special_instruction = specialInstruction;
 	}
 
 	public String getSkill() {
@@ -124,36 +101,36 @@ public class Steps {
 	}
 
 	public int getTimeMinutes() {
-		return timeMinutes;
+		return time_minutes;
 	}
 
 	public void setTimeMinutes(int timeMinutes) {
-		this.timeMinutes = timeMinutes;
+		this.time_minutes = timeMinutes;
 	}
 
 	public String getImageUrl() {
-		return imageUrl;
+		return image_url;
 	}
 
 	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+		this.image_url = imageUrl;
 	}
 
-	public SheetProcess getSheetProcess() {
-		return sheetProcess;
+	public long getSheetProcess() {
+		return sheet_process_id;
 	}
 
-	public void setSheetProcess(SheetProcess sheetProcess) {
-		this.sheetProcess = sheetProcess;
+	public void setSheetProcess(long sheetProcess) {
+		this.sheet_process_id = sheetProcess;
 	}
 
 	@Override
 	public String toString() {
-		return "Steps{" + "stepId=" + stepId + ", fileName='" + fileName + '\'' + ", processName='" + processName + '\''
-				+ ", subprocessName='" + subprocessName + '\'' + ", stepNumber=" + stepNumber + ", toolName='"
-				+ toolName + '\'' + ", toolSpec='" + toolSpec + '\'' + ", specialInstruction='" + specialInstruction
-				+ '\'' + ", skill='" + skill + '\'' + ", timeMinutes=" + timeMinutes + ", imageUrl='" + imageUrl + '\''
-				+ ", sheetProcess=" + sheetProcess + '}';
+		return "Steps{" + "stepId=" + step_id + ", fileName='" + file_name + '\'' + ", processName='" + process_name
+				+ '\'' + ", subprocessName='" + subprocess_name + '\'' + ", stepNumber=" + step_number + ", toolName='"
+				+ tool_name + '\'' + ", toolSpec='" + tool_spec + '\'' + ", specialInstruction='" + special_instruction
+				+ '\'' + ", skill='" + skill + '\'' + ", timeMinutes=" + time_minutes + ", imageUrl='" + image_url
+				+ '\'' + ", sheetProcess=" + sheet_process_id + '}';
 	}
 
 	// Method to retrieve all steps based on a condition
@@ -196,17 +173,17 @@ public class Steps {
 					"update Steps set process_name = :process_name, subprocess_name = :subprocess_name, step_number = :step_number, "
 							+ "tool_name = :tool_name, tool_spec = :tool_spec, special_instruction = :special_instruction, "
 							+ "skill = :skill, time_minutes = :time_minutes, image_url = :image_url where file_name = :file_name and step_number = :step_number");
-			query.setParameter("process_name", this.processName);
-			query.setParameter("subprocess_name", this.subprocessName);
-			query.setParameter("step_number", this.stepNumber);
-			query.setParameter("tool_name", this.toolName);
-			query.setParameter("tool_spec", this.toolSpec);
-			query.setParameter("special_instruction", this.specialInstruction);
+			query.setParameter("process_name", this.process_name);
+			query.setParameter("subprocess_name", this.subprocess_name);
+			query.setParameter("step_number", this.step_number);
+			query.setParameter("tool_name", this.tool_name);
+			query.setParameter("tool_spec", this.tool_spec);
+			query.setParameter("special_instruction", this.special_instruction);
 			query.setParameter("skill", this.skill);
-			query.setParameter("time_minutes", this.timeMinutes);
-			query.setParameter("image_url", this.imageUrl);
-			query.setParameter("file_name", this.fileName);
-			query.setParameter("step_number", this.stepNumber);
+			query.setParameter("time_minutes", this.time_minutes);
+			query.setParameter("image_url", this.image_url);
+			query.setParameter("file_name", this.file_name);
+			query.setParameter("step_number", this.step_number);
 
 			int status = query.executeUpdate();
 			transaction.commit();

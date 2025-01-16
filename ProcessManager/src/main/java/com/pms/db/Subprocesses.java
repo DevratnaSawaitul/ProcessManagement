@@ -14,33 +14,33 @@ public class Subprocesses {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long subprocessId;
-	private String processName;
-	private String subprocessName;
+	private Long subprocess_id;
+	private String process_name;
+	private String subprocess_name;
 	private Boolean active = true;
 
 	public Long getSubprocessId() {
-		return subprocessId;
+		return subprocess_id;
 	}
 
 	public void setSubprocessId(Long subprocessId) {
-		this.subprocessId = subprocessId;
+		this.subprocess_id = subprocessId;
 	}
 
 	public String getProcessName() {
-		return processName;
+		return process_name;
 	}
 
 	public void setProcessName(String processName) {
-		this.processName = processName;
+		this.process_name = processName;
 	}
 
 	public String getSubprocessName() {
-		return subprocessName;
+		return subprocess_name;
 	}
 
 	public void setSubprocessName(String subprocessName) {
-		this.subprocessName = subprocessName;
+		this.subprocess_name = subprocessName;
 	}
 
 	public Boolean getActive() {
@@ -53,8 +53,8 @@ public class Subprocesses {
 
 	@Override
 	public String toString() {
-		return "Subprocesses{" + "subprocessId=" + subprocessId + ", processName='" + processName + '\''
-				+ ", subprocessName='" + subprocessName + '\'' + ", active=" + active + '}';
+		return "Subprocesses{" + "subprocessId=" + subprocess_id + ", processName='" + process_name + '\''
+				+ ", subprocessName='" + subprocess_name + '\'' + ", active=" + active + '}';
 	}
 
 	public Subprocesses[] retrieveAllWhere(String condition) {
@@ -92,9 +92,9 @@ public class Subprocesses {
 		try {
 			Query query = session.createQuery(
 					"update Subprocesses set process_name = :process_name, active = :active where subprocess_name = :subprocess_name");
-			query.setParameter("subprocess_name", this.subprocessName);
+			query.setParameter("subprocess_name", this.subprocess_name);
 			query.setParameter("active", this.active);
-			query.setParameter("process_name", this.processName);
+			query.setParameter("process_name", this.process_name);
 
 			int status = query.executeUpdate();
 			transaction.commit();

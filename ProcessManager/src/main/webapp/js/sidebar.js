@@ -17,7 +17,7 @@ function fetchRecentSheets() {
 
     // Fetch the recent sheets data from the API using Promises
     fetch(apiUrl, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },

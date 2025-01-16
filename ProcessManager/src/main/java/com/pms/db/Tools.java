@@ -14,33 +14,33 @@ public class Tools {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long toolId;
-	private String toolName;
-	private String subProcess;
+	private Long tool_id;
+	private String tool_name;
+	private String sub_process;
 	private Boolean active;
 
 	public Long getToolId() {
-		return toolId;
+		return tool_id;
 	}
 
 	public void setToolId(Long toolId) {
-		this.toolId = toolId;
+		this.tool_id = toolId;
 	}
 
 	public String getToolName() {
-		return toolName;
+		return tool_name;
 	}
 
 	public void setToolName(String toolName) {
-		this.toolName = toolName;
+		this.tool_name = toolName;
 	}
 
 	public String getSubProcess() {
-		return subProcess;
+		return sub_process;
 	}
 
 	public void setSubProcess(String subProcess) {
-		this.subProcess = subProcess;
+		this.sub_process = subProcess;
 	}
 
 	public Boolean getActive() {
@@ -53,7 +53,7 @@ public class Tools {
 
 	@Override
 	public String toString() {
-		return "Tools{" + "toolId=" + toolId + ", toolName='" + toolName + '\'' + ", subProcess='" + subProcess + '\''
+		return "Tools{" + "toolId=" + tool_id + ", toolName='" + tool_name + '\'' + ", subProcess='" + sub_process + '\''
 				+ ", active=" + active + '}';
 	}
 
@@ -90,9 +90,8 @@ public class Tools {
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.createQuery(
-					"update Tools set active = :active where toolName = :toolName");
-			query.setParameter("toolName", this.toolName);
+			Query query = session.createQuery("update Tools set active = :active where toolName = :toolName");
+			query.setParameter("toolName", this.tool_name);
 			query.setParameter("active", this.active);
 
 			int status = query.executeUpdate();

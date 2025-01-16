@@ -13,40 +13,40 @@ public class SheetProcess {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sheetProcessId;
-    private String fileName;
-    private String processName;
+    private Long sheet_process_id;
+    private String file_name;
+    private String process_name;
 
     public Long getSheetProcessId() {
-        return sheetProcessId;
+        return sheet_process_id;
     }
 
     public void setSheetProcessId(Long sheetProcessId) {
-        this.sheetProcessId = sheetProcessId;
+        this.sheet_process_id = sheetProcessId;
     }
 
     public String getFileName() {
-        return fileName;
+        return file_name;
     }
 
     public void setFileName(String fileName) {
-        this.fileName = fileName;
+        this.file_name = fileName;
     }
 
     public String getProcessName() {
-        return processName;
+        return process_name;
     }
 
     public void setProcessName(String processName) {
-        this.processName = processName;
+        this.process_name = processName;
     }
 
     @Override
     public String toString() {
         return "SheetProcess{" +
-                "sheetProcessId=" + sheetProcessId +
-                ", fileName='" + fileName + '\'' +
-                ", processName='" + processName + '\'' +
+                "sheetProcessId=" + sheet_process_id +
+                ", fileName='" + file_name + '\'' +
+                ", processName='" + process_name + '\'' +
                 '}';
     }
 
