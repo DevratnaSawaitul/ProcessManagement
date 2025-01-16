@@ -12,7 +12,7 @@
             <span>Menu</span>
         </div>
         <div class="sidebar-buttons">
-            <button onclick="showModal('add')">+ Add New Sheet</button>
+            <button onclick="openNewSheetModal()">+ Add New Sheet</button>
             <button onclick="showModal('open')">Open Existing Sheet</button>
             <button onclick="toggleRecentSheets()">Recent Sheets</button>
             <div class="recent-sheets" id="recent-sheets">
