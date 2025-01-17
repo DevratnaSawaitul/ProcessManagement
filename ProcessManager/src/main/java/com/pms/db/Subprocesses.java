@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.hibernate.*;
 import com.pms.util.HibernateUtil;
+import com.pms.util.MessageLog;
+
 import org.hibernate.query.Query;
 
 @Entity
@@ -51,19 +53,14 @@ public class Subprocesses {
 		this.active = active;
 	}
 
-	@Override
-	public String toString() {
-		return "Subprocesses{" + "subprocessId=" + subprocess_id + ", processName='" + process_name + '\''
-				+ ", subprocessName='" + subprocess_name + '\'' + ", active=" + active + '}';
-	}
-
 	public Subprocesses[] retrieveAllWhere(String condition) {
+		MessageLog.info("In Subprocesses retrieveAllWhere condition= " + condition);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		try {
 			List<Subprocesses> list = session.createQuery("from Subprocesses " + condition).getResultList();
 			return (Subprocesses[]) list.toArray(new Subprocesses[list.size()]);
 		} catch (Exception e) {
-			// MessageLog.printError(e);
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			session.close();
@@ -71,6 +68,7 @@ public class Subprocesses {
 	}
 
 	public boolean insert() {
+		MessageLog.info("In Subprocesses Insert");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -78,7 +76,7 @@ public class Subprocesses {
 			transaction.commit();
 			return true;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {
@@ -87,6 +85,7 @@ public class Subprocesses {
 	}
 
 	public boolean update() {
+		MessageLog.info("In Subprocesses Update");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -100,7 +99,7 @@ public class Subprocesses {
 			transaction.commit();
 			return status != 0;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {

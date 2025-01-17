@@ -5,6 +5,7 @@ import javax.persistence.*;
 import org.hibernate.*;
 
 import com.pms.util.HibernateUtil;
+import com.pms.util.MessageLog;
 
 import java.util.List;
 
@@ -51,19 +52,14 @@ public class Tools {
 		this.active = active;
 	}
 
-	@Override
-	public String toString() {
-		return "Tools{" + "toolId=" + tool_id + ", toolName='" + tool_name + '\'' + ", subProcess='" + sub_process + '\''
-				+ ", active=" + active + '}';
-	}
-
 	public Tools[] retrieveAllWhere(String condition) {
+		MessageLog.info("In Tools retrieveAllWhere condition= " + condition);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		try {
 			List<Tools> list = session.createQuery(" from Tools " + condition).getResultList();
 			return (Tools[]) list.toArray(new Tools[list.size()]);
 		} catch (Exception e) {
-			// MessageLog.printError(e);
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			session.close();
@@ -71,6 +67,7 @@ public class Tools {
 	}
 
 	public boolean insert() {
+		MessageLog.info("In Tools Insert");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -78,7 +75,7 @@ public class Tools {
 			transaction.commit();
 			return true;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {
@@ -87,6 +84,7 @@ public class Tools {
 	}
 
 	public boolean update() {
+		MessageLog.info("In Tools Update");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -98,7 +96,7 @@ public class Tools {
 			transaction.commit();
 			return status != 0;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {

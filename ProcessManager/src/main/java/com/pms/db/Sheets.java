@@ -5,8 +5,10 @@ import java.util.List;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 
+import javax.mail.Message;
 import javax.persistence.*;
 import com.pms.util.HibernateUtil;
+import com.pms.util.MessageLog;
 
 @Entity
 @Table(name = "sheets")
@@ -96,21 +98,14 @@ public class Sheets {
 		this.last_updated_by = lastUpdatedBy;
 	}
 
-	@Override
-	public String toString() {
-		return "Sheets{" + "sheetId=" + sheet_id + ", fileName='" + file_name + '\'' + ", version='" + version + '\''
-				+ ", date='" + date + '\'' + ", department='" + department + '\'' + ", designNo='" + design_no + '\''
-				+ ", floor='" + floor + '\'' + ", dateOfLastUpdate='" + date_of_last_update + '\'' + ", lastUpdatedBy='"
-				+ last_updated_by + '\'' + '}';
-	}
-
 	public Sheets[] retrieveAllWhere(String condition) {
+		MessageLog.info("In Sheets retrieveAllWhere condition= " + condition);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		try {
 			List<Sheets> list = session.createQuery("from Sheets " + condition).getResultList();
 			return list.toArray(new Sheets[0]);
 		} catch (Exception e) {
-			e.printStackTrace();
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			session.close();
@@ -118,7 +113,7 @@ public class Sheets {
 	}
 
 	public boolean update() {
-		// MessageLog.info("In Sheets update() file_name=" + fileName);
+		MessageLog.info("In Sheets update() file_name=" + file_name);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -139,7 +134,7 @@ public class Sheets {
 			transaction.commit();
 			return status != 0;
 		} catch (Exception e) {
-			// MessageLog.printError(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {
@@ -148,6 +143,7 @@ public class Sheets {
 	}
 
 	public boolean insert() {
+		MessageLog.info("In Sheets insert filename= " + file_name);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -155,7 +151,7 @@ public class Sheets {
 			transaction.commit();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {

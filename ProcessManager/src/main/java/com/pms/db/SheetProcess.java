@@ -41,15 +41,6 @@ public class SheetProcess {
         this.process_name = processName;
     }
 
-    @Override
-    public String toString() {
-        return "SheetProcess{" +
-                "sheetProcessId=" + sheet_process_id +
-                ", fileName='" + file_name + '\'' +
-                ", processName='" + process_name + '\'' +
-                '}';
-    }
-
     public SheetProcess[] retrieveAllWhere(String condition) {
         Session session = HibernateUtil.pmsSessionFactory.openSession();
         try {

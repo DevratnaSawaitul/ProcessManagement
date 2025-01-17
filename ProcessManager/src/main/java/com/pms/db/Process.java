@@ -8,6 +8,7 @@ import org.hibernate.*;
 import org.hibernate.query.Query;
 
 import com.pms.util.HibernateUtil;
+import com.pms.util.MessageLog;
 
 @Entity
 @Table(name = "process")
@@ -41,20 +42,15 @@ public class Process {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
-	@Override
-	public String toString() {
-		return "Process{" + "processId=" + process_id + ", processName='" + process_name + '\'' + ", active=" + active
-				+ '}';
-	}
-
+	
 	public Process[] retrieveAllWhere(String condition) {
+		MessageLog.info("In Process retrieveAllWhere condition= " + condition);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		try {
 			List<Process> list = session.createQuery(" from Process " + condition).getResultList();
 			return (Process[]) list.toArray(new Process[list.size()]);
 		} catch (Exception e) {
-			// MessageLog.printError(e);
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			session.close();
@@ -62,6 +58,7 @@ public class Process {
 	}
 
 	public boolean insert() {
+		MessageLog.info("In Process insert()");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -69,7 +66,7 @@ public class Process {
 			transaction.commit();
 			return true;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {
@@ -78,6 +75,7 @@ public class Process {
 	}
 	
 	public boolean update() {
+		MessageLog.info("In Process update()");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -90,7 +88,7 @@ public class Process {
 			transaction.commit();
 			return status != 0;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {

@@ -18,8 +18,9 @@ public class SheetController {
 	@POST
 	@Path("/recent")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getRecentSheets() {
-		return new SheetService().showSheets();
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getRecentSheets(String request) {
+		return new SheetService().showRecentSheets(request);
 	}
 
 	@POST

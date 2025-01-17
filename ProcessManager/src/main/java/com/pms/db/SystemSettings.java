@@ -4,6 +4,7 @@ import javax.persistence.*;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 import com.pms.util.HibernateUtil;
+import com.pms.util.MessageLog;
 
 import java.util.List;
 
@@ -45,12 +46,8 @@ public class SystemSettings {
 		this.value = value;
 	}
 
-	@Override
-	public String toString() {
-		return "SystemSettings{" + "id=" + id + ", key='" + key + '\'' + ", value='" + value + '\'' + '}';
-	}
-
 	public SystemSettings retrieveByKey(String key, String value) {
+		MessageLog.info("In SystemSetting retrieveByKey key= " + key);
 		Session session = null;
 		try {
 			session = HibernateUtil.pmsSessionFactory.openSession();
@@ -62,7 +59,7 @@ public class SystemSettings {
 			SystemSettings result = query.uniqueResult();
 			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			if (session != null) {
@@ -72,6 +69,7 @@ public class SystemSettings {
 	}
 
 	public SystemSettings[] retrieveAllWhere(String condition) {
+		MessageLog.info("In SystemSettings retrieveAllWhere condition= " + condition);
 		Session session = null;
 		try {
 			session = HibernateUtil.pmsSessionFactory.openSession();
@@ -79,7 +77,7 @@ public class SystemSettings {
 					.getResultList();
 			return list.toArray(new SystemSettings[0]);
 		} catch (Exception e) {
-			e.printStackTrace();
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			if (session != null) {
@@ -89,6 +87,7 @@ public class SystemSettings {
 	}
 
 	public boolean insert() {
+		MessageLog.info("In SystemSettings Insert");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -96,7 +95,7 @@ public class SystemSettings {
 			transaction.commit();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {
@@ -105,6 +104,7 @@ public class SystemSettings {
 	}
 
 	public boolean update() {
+		MessageLog.info("In SystemSettings Update");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -116,7 +116,7 @@ public class SystemSettings {
 			transaction.commit();
 			return status != 0;
 		} catch (Exception e) {
-			e.printStackTrace();
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {

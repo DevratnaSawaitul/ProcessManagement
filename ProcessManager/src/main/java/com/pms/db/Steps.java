@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.hibernate.*;
 import com.pms.util.HibernateUtil;
+import com.pms.util.MessageLog;
+
 import org.hibernate.query.Query;
 
 @Entity
@@ -27,7 +29,6 @@ public class Steps {
 	private String image_url;
 	private Long sheet_process_id;
 
-	// Getters and Setters
 	public Long getStepId() {
 		return step_id;
 	}
@@ -124,31 +125,22 @@ public class Steps {
 		this.sheet_process_id = sheetProcess;
 	}
 
-	@Override
-	public String toString() {
-		return "Steps{" + "stepId=" + step_id + ", fileName='" + file_name + '\'' + ", processName='" + process_name
-				+ '\'' + ", subprocessName='" + subprocess_name + '\'' + ", stepNumber=" + step_number + ", toolName='"
-				+ tool_name + '\'' + ", toolSpec='" + tool_spec + '\'' + ", specialInstruction='" + special_instruction
-				+ '\'' + ", skill='" + skill + '\'' + ", timeMinutes=" + time_minutes + ", imageUrl='" + image_url
-				+ '\'' + ", sheetProcess=" + sheet_process_id + '}';
-	}
-
-	// Method to retrieve all steps based on a condition
 	public Steps[] retrieveAllWhere(String condition) {
+		MessageLog.info("In steps retrieveAllWhere condition= " + condition);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		try {
 			List<Steps> list = session.createQuery("from Steps " + condition).getResultList();
 			return (Steps[]) list.toArray(new Steps[list.size()]);
 		} catch (Exception e) {
-			// MessageLog.printError(e);
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			session.close();
 		}
 	}
 
-	// Method to insert a new step
 	public boolean insert() {
+		MessageLog.info("In Steps Insert");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -156,7 +148,7 @@ public class Steps {
 			transaction.commit();
 			return true;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {
@@ -164,8 +156,8 @@ public class Steps {
 		}
 	}
 
-	// Method to update a step based on file_name and step_number
 	public boolean update() {
+		MessageLog.info("In Steps update");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -189,7 +181,7 @@ public class Steps {
 			transaction.commit();
 			return status != 0;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {

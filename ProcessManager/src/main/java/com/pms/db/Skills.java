@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 import com.pms.util.HibernateUtil;
+import com.pms.util.MessageLog;
 
 @Entity
 @Table(name = "skills")
@@ -42,26 +43,22 @@ public class Skills {
 		this.active = active;
 	}
 
-	@Override
-	public String toString() {
-		return "Skills{" + "skillId=" + skill_id + ", skillName='" + skill_name + '\'' + ", active=" + active + '}';
-	}
-
 	public Skills[] retrieveAllWhere(String condition) {
+		MessageLog.info("In Skills retrieveAllWhere condition= " + condition);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		try {
 			List<Skills> list = session.createQuery("from Skills " + condition).getResultList();
 			return (Skills[]) list.toArray(new Skills[list.size()]);
 		} catch (Exception e) {
-			// MessageLog.printError(e);
+			MessageLog.printError(e);
 			return null;
 		} finally {
 			session.close();
 		}
 	}
 
-	// Method to insert a new skill
 	public boolean insert() {
+		MessageLog.info("In Skills Insert");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -69,7 +66,7 @@ public class Skills {
 			transaction.commit();
 			return true;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {
@@ -78,11 +75,11 @@ public class Skills {
 	}
 
 	public boolean update() {
+		MessageLog.info("In Skills Update");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.createQuery(
-					"update Skills set active = :active where skill_name = :skill_name");
+			Query query = session.createQuery("update Skills set active = :active where skill_name = :skill_name");
 			query.setParameter("skill_name", this.skill_name);
 			query.setParameter("active", this.active);
 
@@ -90,7 +87,7 @@ public class Skills {
 			transaction.commit();
 			return status != 0;
 		} catch (Exception e) {
-			System.out.println(e);
+			MessageLog.printError(e);
 			transaction.rollback();
 			return false;
 		} finally {

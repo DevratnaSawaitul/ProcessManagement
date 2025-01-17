@@ -7,12 +7,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.pms.db.SystemSettings;
+import com.pms.util.MessageLog;
 import com.pms.util.NormalEncrp;
 
 public class LoginService {
 
     public String userLogin(String userLogin, HttpServletResponse res, HttpServletRequest request) {
-        JSONObject response = new JSONObject();
+    	MessageLog.info("in login");
+    	JSONObject response = new JSONObject();
         try {
             // Parse the input JSON
             JSONParser parser = new JSONParser();
