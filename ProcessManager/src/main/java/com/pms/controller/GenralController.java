@@ -25,20 +25,6 @@ public class GenralController {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String login(String user_login) {
-		System.out.println("I am in the login method 83");
-		System.out.print("in getMsg2 26 " + user_login);
-
-		// Use Jackson to parse the input JSON
-		ObjectMapper objectMapper = new ObjectMapper();
-		String message;
-		try {
-			JsonNode jsonNode = objectMapper.readTree(user_login);
-			message = jsonNode.get("username").asText(); // Extract the value of "message"
-			System.out.println(jsonNode.get("username").asText());
-		} catch (Exception e) {
-			
-		}
-
 		return new LoginService().userLogin(user_login, res, req);
 	}
 }

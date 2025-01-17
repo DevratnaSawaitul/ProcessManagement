@@ -31,9 +31,6 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getIt2(String input) {
-		System.out.print("in getMsg2 26 " + input);
-
-		// Use Jackson to parse the input JSON
 		ObjectMapper objectMapper = new ObjectMapper();
 		String message;
 		try {
@@ -42,36 +39,7 @@ public class MyResource {
 		} catch (Exception e) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Invalid JSON input\"}").build();
 		}
-
-		// Create a simple JSON response
 		String jsonResponse = "{\"response\":\"" + message + "\"}";
-
 		return Response.ok(jsonResponse).build();
-	}
-
-	@Context
-	HttpServletResponse res;
-	@Context
-	HttpServletRequest req;
-
-	@POST
-	@Path("/login")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String login(String user_login) {
-		System.out.println("I am in the login method 83");
-		System.out.print("in getMsg2 26 " + user_login);
-
-		// Use Jackson to parse the input JSON
-		ObjectMapper objectMapper = new ObjectMapper();
-		String message;
-		try {
-			JsonNode jsonNode = objectMapper.readTree(user_login);
-			message = jsonNode.get("username").asText(); // Extract the value of "message"
-			System.out.println(jsonNode.get("username").asText());
-		} catch (Exception e) {
-			
-		}
-
-		return new LoginService().userLogin(user_login, res, req);
 	}
 }

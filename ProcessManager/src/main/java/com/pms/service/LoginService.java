@@ -29,8 +29,6 @@ public class LoginService {
                 return response.toString();
             }
 
-            System.out.println("Attempting login for username: " + username);
-
             // Check credentials in the database
             SystemSettings usernameCheck = new SystemSettings().retrieveByKey("username", username);
             SystemSettings passwordCheck = new SystemSettings().retrieveByKey("password", password);
@@ -40,8 +38,6 @@ public class LoginService {
                 response.put("msg", "Invalid username/password");
                 return response.toString();
             }
-
-            System.out.println("Login successful for username: " + username);
 
             // Create success response
             response.put("success", true);

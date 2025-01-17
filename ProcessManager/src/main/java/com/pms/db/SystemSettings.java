@@ -60,7 +60,6 @@ public class SystemSettings {
 			query.setParameter("key", key);
 			query.setParameter("value", value);
 			SystemSettings result = query.uniqueResult();
-			System.out.println("Result: " + result);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
