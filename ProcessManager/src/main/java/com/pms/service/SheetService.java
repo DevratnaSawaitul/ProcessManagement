@@ -70,4 +70,75 @@ public class SheetService {
 		}
 		return response.toString();
 	}
+
+	public String showSheets(String request) {
+		MessageLog.info("In SheetService showSheets() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		JSONArray sheets = new JSONArray();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			String loadType = info.get("load_type") != null ? (String) info.get("load_type") : "";
+			if ("singleSheet".equalsIgnoreCase(loadType)) {
+				String fileName = info.get("file_name") != null ? (String) info.get("file_name") : "";
+				Sheets s[];
+
+				if (!fileName.isEmpty()) {
+					s = new Sheets().retrieveAllWhere(" where file_name='" + fileName + "'");
+				} else {
+					response.put("status", false);
+					response.put("message", "sheet_id_or_file_name_required");
+					return response.toString();
+				}
+
+				if (s != null) {
+					JSONObject sheetDetails = new JSONObject();
+					sheetDetails.put("sheet_id", s[0].getSheetId());
+					sheetDetails.put("file_name", s[0].getFileName());
+					sheetDetails.put("version", s[0].getVersion());
+					sheetDetails.put("date", s[0].getDate());
+					sheetDetails.put("department", s[0].getDepartment());
+					sheetDetails.put("design_no", s[0].getDesignNo());
+					sheetDetails.put("floor", s[0].getFloor());
+					sheetDetails.put("last_updated_by", s[0].getLastUpdatedBy());
+					sheetDetails.put("date_of_last_update", s[0].getDateOfLastUpdate());
+					sheets.add(sheetDetails);
+					response.put("status", true);
+					response.put("sheets", sheets);
+				} else {
+					response.put("status", false);
+					response.put("message", "sheet_not_found");
+				}
+			} else if ("all".equalsIgnoreCase(loadType)) {
+				Sheets[] allSheets = new Sheets().retrieveAllWhere(" order by sheet_id desc");
+
+				if (allSheets != null && allSheets.length > 0) {
+					for (Sheets s : allSheets) {
+						JSONObject sheetDetails = new JSONObject();
+						sheetDetails.put("sheet_id", s.getSheetId());
+						sheetDetails.put("file_name", s.getFileName());
+						sheetDetails.put("version", s.getVersion());
+						sheetDetails.put("date", s.getDate());
+						sheetDetails.put("department", s.getDepartment());
+						sheetDetails.put("design_no", s.getDesignNo());
+						sheetDetails.put("floor", s.getFloor());
+						sheetDetails.put("last_updated_by", s.getLastUpdatedBy());
+						sheetDetails.put("date_of_last_update", s.getDateOfLastUpdate());
+						sheets.add(sheetDetails);
+					}
+				}
+				response.put("status", true);
+				response.put("sheets", sheets);
+			} else {
+				response.put("status", false);
+				response.put("message", "invalid_load_type");
+			}
+		} catch (Exception e) {
+			response = new JSONObject();
+			response.put("status", false);
+			response.put("message", "exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
 }

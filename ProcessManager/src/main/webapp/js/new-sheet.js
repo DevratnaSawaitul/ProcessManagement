@@ -21,11 +21,10 @@ function openNewSheetModal() {
 function closeNewSheetModal() {
     newSheetModal.classList.remove("show");
 }
-
-/**
- * Saves the entered sheet data.
- */
 function saveNewSheetData() {
+    // Disable the save button to prevent multiple submissions
+    saveButton.disabled = true;
+
     // Show the loader
     document.getElementById("loader").style.display = "block"; // Show loader
 
@@ -44,6 +43,8 @@ function saveNewSheetData() {
     for (const key in data) {
         if (!data[key]) {
             alert(`${key} cannot be empty!`);
+            document.getElementById("loader").style.display = "none"; // Hide loader if validation fails
+            saveButton.disabled = false; // Re-enable the save button
             return;
         }
     }
@@ -80,6 +81,7 @@ function saveNewSheetData() {
             alert("Sheet saved successfully!");
             closeNewSheetModal();
             fetchRecentSheets();
+            loadExistingSheets();
         } else {
             // Handle failure cases
             let errorMsg = "";
@@ -104,9 +106,11 @@ function saveNewSheetData() {
         // Handle errors during fetch or JSON parsing
         console.error("Error during API call:", error);
         alert("An unexpected error occurred.");
+
+        // Re-enable the save button in case of error
+        saveButton.disabled = false;
     });
 }
-
 
 /**
  * Function to format the date as "dd-mm-yyyy hh:mm:ss"

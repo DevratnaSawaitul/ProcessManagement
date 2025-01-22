@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="css/main-content.css">
 <link rel="stylesheet" href="css/modal.css">
 <link rel="stylesheet" href="css/new-sheet.css">
+<link rel="stylesheet" href="css/open-existing-sheet.css">
+<link rel="stylesheet" href="css/open-single-sheet.css">
 </head>
 <body>
 	<div class="container">
@@ -19,7 +21,9 @@
 	<%@ include file="/components/new-sheet.jsp"%>
 	<script src="js/sidebar.js"></script>
 	<script src="js/modal.js"></script>
-	<script src="js/main.js"></script>
 	<script src="js/new-sheet.js"></script>
+	<script src="js/open-existing-sheet.js"></script>
+	<script src="js/open-single-sheet.js"></script>
+	<script src="js/main-content.js"></script>
 </body>
 </html>

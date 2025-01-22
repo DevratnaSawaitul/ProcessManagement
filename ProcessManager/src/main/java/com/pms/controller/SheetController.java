@@ -30,4 +30,12 @@ public class SheetController {
 	public String addSheets(String request) {
 		return new SheetService().addSheets(request);
 	}
+	
+	@POST
+	@Path("/showSheets")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String showSheets(String request) {
+		return new SheetService().showSheets(request);
+	}
 }
