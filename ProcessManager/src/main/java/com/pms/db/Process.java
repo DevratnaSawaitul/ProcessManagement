@@ -42,7 +42,7 @@ public class Process {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
+
 	public Process[] retrieveAllWhere(String condition) {
 		MessageLog.info("In Process retrieveAllWhere condition= " + condition);
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
@@ -73,16 +73,15 @@ public class Process {
 			session.close();
 		}
 	}
-	
+
 	public boolean update() {
 		MessageLog.info("In Process update()");
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.createQuery(
-					"update Process set active = :active where processName = :processName");
+			Query query = session.createQuery("update Process set active = :active where process_name = :process_name");
 			query.setParameter("active", this.active);
-			query.setParameter("skill_name", this.process_name);
+			query.setParameter("process_name", this.process_name);
 
 			int status = query.executeUpdate();
 			transaction.commit();

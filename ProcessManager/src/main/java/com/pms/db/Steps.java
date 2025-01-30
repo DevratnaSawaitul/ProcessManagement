@@ -164,7 +164,7 @@ public class Steps {
 			Query query = session.createQuery(
 					"update Steps set process_name = :process_name, subprocess_name = :subprocess_name, step_number = :step_number, "
 							+ "tool_name = :tool_name, tool_spec = :tool_spec, special_instruction = :special_instruction, "
-							+ "skill = :skill, time_minutes = :time_minutes, image_url = :image_url where file_name = :file_name and step_number = :step_number");
+							+ "skill = :skill, time_minutes = :time_minutes, image_url = :image_url where step_id = :step_id");
 			query.setParameter("process_name", this.process_name);
 			query.setParameter("subprocess_name", this.subprocess_name);
 			query.setParameter("step_number", this.step_number);
@@ -174,8 +174,7 @@ public class Steps {
 			query.setParameter("skill", this.skill);
 			query.setParameter("time_minutes", this.time_minutes);
 			query.setParameter("image_url", this.image_url);
-			query.setParameter("file_name", this.file_name);
-			query.setParameter("step_number", this.step_number);
+			query.setParameter("step_id", this.step_id);
 
 			int status = query.executeUpdate();
 			transaction.commit();

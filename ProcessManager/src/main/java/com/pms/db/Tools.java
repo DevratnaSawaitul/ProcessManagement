@@ -88,8 +88,8 @@ public class Tools {
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.createQuery("update Tools set active = :active where toolName = :toolName");
-			query.setParameter("toolName", this.tool_name);
+			Query query = session.createQuery("update Tools set active = :active where tool_name = :tool_name");
+			query.setParameter("tool_name", this.tool_name);
 			query.setParameter("active", this.active);
 
 			int status = query.executeUpdate();

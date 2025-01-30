@@ -90,9 +90,9 @@ public class Subprocesses {
 		Transaction transaction = session.beginTransaction();
 		try {
 			Query query = session.createQuery(
-					"update Subprocesses set process_name = :process_name, active = :active where subprocess_name = :subprocess_name");
-			query.setParameter("subprocess_name", this.subprocess_name);
+					"update Subprocesses set active = :active where subprocess_name = :subprocess_name and process_name = :process_name");
 			query.setParameter("active", this.active);
+			query.setParameter("subprocess_name", this.subprocess_name);
 			query.setParameter("process_name", this.process_name);
 
 			int status = query.executeUpdate();
