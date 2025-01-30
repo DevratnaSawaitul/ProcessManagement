@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="css/new-sheet.css">
 <link rel="stylesheet" href="css/open-existing-sheet.css">
 <link rel="stylesheet" href="css/open-single-sheet.css">
+<link rel="stylesheet" href="css/show-skills.css">
+<link rel="stylesheet" href="css/show-tools.css">
+<link rel="stylesheet" href="css/show-sub-process.css">
+<link rel="stylesheet" href="css/show-process.css">
 </head>
 <body>
 	<div class="container">
@@ -25,5 +29,9 @@
 	<script src="js/open-existing-sheet.js"></script>
 	<script src="js/open-single-sheet.js"></script>
 	<script src="js/main-content.js"></script>
+	<script src="js/show-skills.js"></script>
+	<script src="js/show-tools.js"></script>
+	<script src="js/show-sub-process.js"></script>
+	<script src="js/show-process.js"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
  */
 function showView(viewId) {
 	// IDs of all sections in main-content
-	const sections = ["default-content", "existing-sheets-content", "single-sheet-content"];
+	const sections = ["default-content", "existing-sheets-content", "single-sheet-content", "show-process", "show-sub-process", "show-tools", "show-skills"];
 
 	// Loop through sections and toggle visibility
 	sections.forEach((id) => {
@@ -18,6 +18,14 @@ function showView(viewId) {
 	// Perform specific actions when switching views
 	if (viewId === "existing-sheets-content") {
 		loadExistingSheets(); // Trigger the API call to fetch sheets data
+	} else if (viewId === "show-process") {
+		loadProcesses();
+	} else if (viewId === "show-sub-process") {
+		loadSubProcesses();
+	} else if (viewId === "show-tools") {
+		loadTools();
+	} else if (viewId === "show-skills") {
+		loadSkills();
 	}
 }
 

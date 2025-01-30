@@ -4,7 +4,6 @@
         <table class="sheets-table-single-sheet">
             <thead>
                 <tr>
-                    <th>Sheet ID</th>
                     <th>File Name</th>
                     <th>Design No</th>
                     <th>Department</th>

@@ -6,10 +6,9 @@ function loadExistingSheets() {
 	const jsonData = JSON.stringify({ load_type: "all" });
 
 	const tableBody = document.getElementById("sheets-table-body-existing-sheet");
-	const mainContent = document.getElementById("main-content-existing-sheet");
 
 	// Clear any previous rows and show a loading message
-	tableBody.innerHTML = "<tr><td colspan='9'>Loading...</td></tr>";
+	tableBody.innerHTML = "<tr><td colspan='8'>Loading...</td></tr>";
 
 	fetch(apiUrl, {
 		method: "POST",
@@ -32,12 +31,12 @@ function loadExistingSheets() {
 				populateTable(data.sheets);
 			} else {
 				tableBody.innerHTML =
-					"<tr><td colspan='9'>No sheets available to display.</td></tr>";
+					"<tr><td colspan='8'>No sheets available to display.</td></tr>";
 			}
 		})
 		.catch((error) => {
 			console.error("Error fetching sheets data:", error);
-			tableBody.innerHTML = `<tr><td colspan='9'>Error: ${error.message}</td></tr>`;
+			tableBody.innerHTML = `<tr><td colspan='8'>Error: ${error.message}</td></tr>`;
 		});
 }
 
@@ -54,7 +53,6 @@ function populateTable(sheets) {
 
 		const row = document.createElement("tr");
 		row.innerHTML = `
-        	<td>${sheet.sheet_id}</td>
             <td>${sheet.file_name}</td>
             <td>${sheet.design_no}</td>
             <td>${sheet.department}</td>

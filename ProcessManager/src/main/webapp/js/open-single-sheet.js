@@ -15,10 +15,9 @@ function loadSingleSheets(sheet) {
     const jsonData = JSON.stringify({ load_type: "singleSheet",file_name:sheet });
 
     const tableBody = document.getElementById("sheets-table-body-single-sheet");
-    const mainContent = document.getElementById("main-content-single-sheet");
 
     // Clear any previous rows and show a loading message
-    tableBody.innerHTML = "<tr><td colspan='9'>Loading...</td></tr>";
+    tableBody.innerHTML = "<tr><td colspan='8'>Loading...</td></tr>";
 
     fetch(apiUrl, {
         method: "POST",
@@ -41,12 +40,12 @@ function loadSingleSheets(sheet) {
                 populateSingleTable(data.sheets);
             } else {
                 tableBody.innerHTML =
-                    "<tr><td colspan='9'>No sheets available to display.</td></tr>";
+                    "<tr><td colspan='8'>No sheets available to display.</td></tr>";
             }
         })
         .catch((error) => {
             console.error("Error fetching sheets data:", error);
-            tableBody.innerHTML = `<tr><td colspan='9'>Error: ${error.message}</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan='8'>Error: ${error.message}</td></tr>`;
         });
 }
 
@@ -63,7 +62,6 @@ function populateSingleTable(sheets) {
 
         const row = document.createElement("tr");
         row.innerHTML = `
-        	<td>${sheet.sheet_id}</td>
             <td>${sheet.file_name}</td>
             <td>${sheet.design_no}</td>
             <td>${sheet.department}</td>
