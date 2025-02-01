@@ -187,4 +187,23 @@ public class Steps {
 			session.close();
 		}
 	}
+
+	public boolean delete() {
+		MessageLog.info("In Steps delete");
+		Session session = HibernateUtil.pmsSessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.createQuery("delete from Steps where step_id = :step_id");
+			query.setParameter("step_id", this.step_id);
+			int status = query.executeUpdate();
+			transaction.commit();
+			return status != 0;
+		} catch (Exception e) {
+			MessageLog.printError(e);
+			transaction.rollback();
+			return false;
+		} finally {
+			session.close();
+		}
+	}
 }

@@ -94,4 +94,23 @@ public class Skills {
 			session.close();
 		}
 	}
+
+	public boolean delete() {
+		MessageLog.info("In Skills delete");
+		Session session = HibernateUtil.pmsSessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.createQuery("delete from Skills where skill_id = :skill_id");
+			query.setParameter("skill_id", this.skill_id);
+			int status = query.executeUpdate();
+			transaction.commit();
+			return status != 0;
+		} catch (Exception e) {
+			MessageLog.printError(e);
+			transaction.rollback();
+			return false;
+		} finally {
+			session.close();
+		}
+	}
 }

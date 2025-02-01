@@ -30,12 +30,68 @@ public class SheetController {
 	public String addSheets(String request) {
 		return new SheetService().addSheets(request);
 	}
-	
+
+	@POST
+	@Path("/updateSheet")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String updateSheet(String request) {
+		return new SheetService().updateSheet(request);
+	}
+
 	@POST
 	@Path("/showSheets")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String showSheets(String request) {
 		return new SheetService().showSheets(request);
+	}
+
+	@POST
+	@Path("/addStep")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addStep(String request) {
+		return new SheetService().addStep(request);
+	}
+
+	@POST
+	@Path("/updateStep")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String updateStep(String request) {
+		return new SheetService().updateStep(request);
+	}
+
+	@POST
+	@Path("/deleteSheet")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteSheet(String request) {
+		return new SheetService().deleteSheet(request);
+	}
+
+	@POST
+	@Path("/deleteStep")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteStep(String request) {
+		return new SheetService().deleteStep(request);
+	}
+
+	@POST
+	@Path("/addSheetProcess")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addSheetProcess(String request) {
+		return new SheetService().addSheetProcess(request);
+	}
+
+	@POST
+	@Path("/deleteSheetProcess")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteSheetProcess(String request) {
+		return new SheetService().deleteSheetProcess(request);
 	}
 }

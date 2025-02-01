@@ -88,10 +88,30 @@ public class Tools {
 		Session session = HibernateUtil.pmsSessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			Query query = session.createQuery("update Tools set active = :active where tool_name = :tool_name");
+			Query query = session.createQuery("update Tools set active = :active where tool_name = :tool_name and sub_process = :sub_process");
 			query.setParameter("tool_name", this.tool_name);
+			query.setParameter("sub_process", this.sub_process);
 			query.setParameter("active", this.active);
 
+			int status = query.executeUpdate();
+			transaction.commit();
+			return status != 0;
+		} catch (Exception e) {
+			MessageLog.printError(e);
+			transaction.rollback();
+			return false;
+		} finally {
+			session.close();
+		}
+	}
+
+	public boolean delete() {
+		MessageLog.info("In Tools delete");
+		Session session = HibernateUtil.pmsSessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.createQuery("delete from Tools where tool_id = :tool_id");
+			query.setParameter("tool_id", this.tool_id);
 			int status = query.executeUpdate();
 			transaction.commit();
 			return status != 0;

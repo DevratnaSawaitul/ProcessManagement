@@ -129,7 +129,6 @@ public class Sheets {
 			query.setParameter("date_of_last_update", this.date_of_last_update);
 			query.setParameter("last_updated_by", this.last_updated_by);
 			query.setParameter("file_name", this.file_name);
-
 			int status = query.executeUpdate();
 			transaction.commit();
 			return status != 0;
@@ -150,6 +149,40 @@ public class Sheets {
 			session.save(this);
 			transaction.commit();
 			return true;
+		} catch (Exception e) {
+			MessageLog.printError(e);
+			transaction.rollback();
+			return false;
+		} finally {
+			session.close();
+		}
+	}
+
+	public boolean delete(SheetProcess spList[], Steps steps[]) {
+		MessageLog.info("In Sheets delete");
+		Session session = HibernateUtil.pmsSessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			if (steps != null && steps.length > 0) {
+				for (Steps step : steps) {
+					Query query = session.createQuery("delete from Steps where step_id = :step_id");
+					query.setParameter("step_id", step.getStepId());
+					query.executeUpdate();
+				}
+			}
+			if (spList != null && spList.length > 0) {
+				for (SheetProcess sp : spList) {
+					Query query = session
+							.createQuery("delete from SheetProcess where sheet_process_id = :sheet_process_id");
+					query.setParameter("sheet_process_id", sp.getSheetProcessId());
+					query.executeUpdate();
+				}
+			}
+			Query sheetQuery = session.createQuery("delete from Sheets where sheet_id = :sheet_id");
+			sheetQuery.setParameter("sheet_id", this.sheet_id);
+			int sheetDeleteStatus = sheetQuery.executeUpdate();
+			transaction.commit();
+			return sheetDeleteStatus != 0;
 		} catch (Exception e) {
 			MessageLog.printError(e);
 			transaction.rollback();

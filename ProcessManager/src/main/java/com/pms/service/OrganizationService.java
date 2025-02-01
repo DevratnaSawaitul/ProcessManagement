@@ -1,10 +1,12 @@
 package com.pms.service;
 
+import org.apache.xpath.operations.Bool;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.pms.db.Skills;
+import com.pms.db.Steps;
 import com.pms.db.Subprocesses;
 import com.pms.db.Process;
 import com.pms.db.Tools;
@@ -141,8 +143,7 @@ public class OrganizationService {
 			if ("sub_process_related".equalsIgnoreCase(loadType)) {
 				String sub_process = info.get("sub_process") != null ? (String) info.get("sub_process") : "";
 				if (!sub_process.isEmpty()) {
-					tools = new Tools()
-							.retrieveAllWhere(" where sub_process='" + sub_process + "' and active='true'");
+					tools = new Tools().retrieveAllWhere(" where sub_process='" + sub_process + "' and active='true'");
 				} else {
 					response.put("status", false);
 					response.put("message", "sub_process_required");
@@ -239,6 +240,436 @@ public class OrganizationService {
 			response = new JSONObject();
 			response.put("status", false);
 			response.put("message", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String addProcess(String request) {
+		MessageLog.info("In OrganizationService addProcess() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			String operation = info.get("operation") != null ? (String) info.get("operation") : "";
+			boolean active = "yes".equalsIgnoreCase(info.get("active").toString())
+					|| Boolean.TRUE.equals(info.get("active"));
+			String process_name = info.get("process_name") != null ? info.get("process_name").toString().trim() : "";
+			if (process_name.isEmpty()) {
+				response = new JSONObject();
+				response.put("status", false);
+				response.put("message", "process_name_is_manadatory");
+				return response.toString();
+			}
+			Process[] p1 = new Process()
+					.retrieveAllWhere("where lower(process_name)='" + process_name.toLowerCase() + "'");
+			Process p = new Process();
+			if (operation.equalsIgnoreCase("add")) {
+				if (p1 != null && p1.length > 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "already_exist");
+					return response.toString();
+				}
+				p.setProcessName(process_name);
+				p.setActive(true);
+				if (p.insert()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "process_added");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			} else if (operation.equalsIgnoreCase("update")) {
+				if (p1 == null || p1.length <= 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "process_name_not_exist");
+					return response.toString();
+				}
+				p.setProcessName(p1[0].getProcessName());
+				p.setActive(active);
+				if (p.update()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "process_updated");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			}
+		} catch (Exception e) {
+			response = new JSONObject();
+			response.put("status", false);
+			response.put("message", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String addSubProcess(String request) {
+		MessageLog.info("In OrganizationService addSubProcess() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			String operation = info.get("operation") != null ? (String) info.get("operation") : "";
+			boolean active = "yes".equalsIgnoreCase(info.get("active").toString())
+					|| Boolean.TRUE.equals(info.get("active"));
+			String process_name = info.get("process_name") != null ? info.get("process_name").toString().trim() : "";
+			String subprocess_name = info.get("subprocess_name") != null ? info.get("subprocess_name").toString().trim()
+					: "";
+			if (subprocess_name.isEmpty()) {
+				response = new JSONObject();
+				response.put("status", false);
+				response.put("message", "subprocess_name_is_manadatory");
+				return response.toString();
+			}
+			if (process_name.isEmpty()) {
+				response = new JSONObject();
+				response.put("status", false);
+				response.put("message", "process_name_is_manadatory");
+				return response.toString();
+			}
+			Process[] pro = new Process()
+					.retrieveAllWhere("where lower(process_name)='" + process_name.toLowerCase() + "'");
+			if (pro == null || pro.length <= 0) {
+				response = new JSONObject();
+				response.put("success", false);
+				response.put("msg", "process_not_exist");
+				return response.toString();
+			}
+			Subprocesses[] p1 = new Subprocesses()
+					.retrieveAllWhere("where lower(process_name)='" + process_name.toLowerCase()
+							+ "' and lower(subprocess_name)='" + subprocess_name.toLowerCase() + "'");
+			Subprocesses p = new Subprocesses();
+			if (operation.equalsIgnoreCase("add")) {
+				if (p1 != null && p1.length > 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "already_exist");
+					return response.toString();
+				}
+				p.setProcessName(process_name);
+				p.setSubprocessName(subprocess_name);
+				p.setActive(true);
+				if (p.insert()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "sub_process_added");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			} else if (operation.equalsIgnoreCase("update")) {
+				if (p1 == null || p1.length <= 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "not_exist");
+					return response.toString();
+				}
+				p.setProcessName(p1[0].getProcessName());
+				p.setSubprocessName(p1[0].getSubprocessName());
+				p.setActive(active);
+				if (p.update()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "sub_process_updated");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			}
+		} catch (Exception e) {
+			response = new JSONObject();
+			response.put("status", false);
+			response.put("message", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String addTools(String request) {
+		MessageLog.info("In OrganizationService addTools() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			String operation = info.get("operation") != null ? (String) info.get("operation") : "";
+			boolean active = "yes".equalsIgnoreCase(info.get("active").toString())
+					|| Boolean.TRUE.equals(info.get("active"));
+			String tool_name = info.get("tool_name") != null ? info.get("tool_name").toString().trim() : "";
+			String sub_process = info.get("sub_process") != null ? info.get("sub_process").toString().trim() : "";
+			if (sub_process.isEmpty()) {
+				response = new JSONObject();
+				response.put("status", false);
+				response.put("message", "subprocess_name_is_manadatory");
+				return response.toString();
+			}
+			if (tool_name.isEmpty()) {
+				response = new JSONObject();
+				response.put("status", false);
+				response.put("message", "tool_name_is_manadatory");
+				return response.toString();
+			}
+			Tools[] t1 = new Tools().retrieveAllWhere("where lower(tool_name)='" + tool_name.toLowerCase()
+					+ "' and lower(sub_process)='" + sub_process.toLowerCase() + "'");
+			Tools t = new Tools();
+			if (operation.equalsIgnoreCase("add")) {
+				if (t1 != null && t1.length > 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "already_exist");
+					return response.toString();
+				}
+				t.setActive(true);
+				t.setSubProcess(sub_process);
+				t.setToolName(tool_name);
+				if (t.insert()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "tool_added");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			} else if (operation.equalsIgnoreCase("update")) {
+				if (t1 == null || t1.length <= 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "not_exist");
+					return response.toString();
+				}
+				t.setActive(active);
+				t.setSubProcess(sub_process);
+				t.setToolName(tool_name);
+				if (t.update()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "tool_updated");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			}
+		} catch (Exception e) {
+			response = new JSONObject();
+			response.put("status", false);
+			response.put("message", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String addSkills(String request) {
+		MessageLog.info("In OrganizationService addSkills() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			String operation = info.get("operation") != null ? (String) info.get("operation") : "";
+			boolean active = "yes".equalsIgnoreCase(info.get("active").toString())
+					|| Boolean.TRUE.equals(info.get("active"));
+			String skill_name = info.get("skill_name") != null ? info.get("skill_name").toString().trim() : "";
+			if (skill_name.isEmpty()) {
+				response = new JSONObject();
+				response.put("status", false);
+				response.put("message", "skill_name_is_manadatory");
+				return response.toString();
+			}
+			Skills[] s1 = new Skills().retrieveAllWhere("where lower(skill_name)='" + skill_name.toLowerCase() + "'");
+			Skills s = new Skills();
+			if (operation.equalsIgnoreCase("add")) {
+				if (s1 != null && s1.length > 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "already_exist");
+					return response.toString();
+				}
+				s.setSkillName(skill_name);
+				s.setActive(true);
+				if (s.insert()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "skill_added");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			} else if (operation.equalsIgnoreCase("update")) {
+				if (s1 == null || s1.length <= 0) {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "skill_name_not_exist");
+					return response.toString();
+				}
+				s.setSkillName(s1[0].getSkillName());
+				s.setActive(active);
+				if (s.update()) {
+					response = new JSONObject();
+					response.put("status", true);
+					response.put("message", "skill_updated");
+				} else {
+					response = new JSONObject();
+					response.put("status", false);
+					response.put("message", "failed");
+				}
+			}
+		} catch (Exception e) {
+			response = new JSONObject();
+			response.put("status", false);
+			response.put("message", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String deleteProcess(String request) {
+		MessageLog.info("In OrganizationService deleteSubProcess() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			Process process = new Process();
+			process.setProcessId(Long.parseLong(info.get("process_id").toString()));
+			process.setProcessName(info.get("process_name") != null ? info.get("process_name").toString().trim() : "");
+			if (process.getProcessName().isEmpty()) {
+				response = new JSONObject();
+				response.put("success", false);
+				response.put("msg", "process_empty");
+				return response.toString();
+			}
+			Process p[] = process
+					.retrieveAllWhere("where process_id='"+process.getProcessId()+"' and lower(process_name)='" + process.getProcessName().toLowerCase() + "'");
+			if (p == null || p.length <= 0) {
+				response = new JSONObject();
+				response.put("success", false);
+				response.put("msg", "process_not_exist");
+				return response.toString();
+			}
+			Subprocesses sp[] = new Subprocesses().retrieveAllWhere(
+					"where lower(process_name)='" + process.getProcessName().toLowerCase().trim() + "'");
+			Tools tool[] = new Tools().retrieveAllWhere(
+					"where sub_process in (select subprocess_name from Subprocesses where lower(process_name)='"
+							+ process.getProcessName().toLowerCase().trim() + "')");
+			if (process.delete(sp, tool)) {
+				response.put("success", true);
+				response.put("msg", "process_deleted");
+			} else {
+				response.put("success", false);
+				response.put("msg", "failed");
+			}
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("msg", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String deleteSubProcess(String request) {
+		MessageLog.info("In OrganizationService deleteSubProcess() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			Subprocesses subprocesses = new Subprocesses();
+			subprocesses.setSubprocessId(Long.parseLong(info.get("subprocess_id").toString()));
+			subprocesses.setSubprocessName(
+					info.get("subprocess_name") != null ? info.get("subprocess_name").toString().trim() : "");
+			if (subprocesses.getSubprocessName().isEmpty()) {
+				response = new JSONObject();
+				response.put("success", false);
+				response.put("msg", "sub_process_empty");
+				return response.toString();
+			}
+			Subprocesses s[] = subprocesses
+					.retrieveAllWhere("where subprocess_name='" + subprocesses.getSubprocessName() + "'");
+			if (s == null || s.length <= 0) {
+				response = new JSONObject();
+				response.put("success", false);
+				response.put("msg", "sub_process_not_exist");
+				return response.toString();
+			}
+			Tools tool[] = new Tools().retrieveAllWhere("where sub_process='" + subprocesses.getSubprocessName() + "'");
+			if (subprocesses.delete(tool)) {
+				response.put("success", true);
+				response.put("msg", "subprocess_deleted");
+			} else {
+				response.put("success", false);
+				response.put("msg", "failed");
+			}
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("msg", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String deleteTools(String request) {
+		MessageLog.info("In OrganizationService deleteTools() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			Tools tool = new Tools();
+			tool.setToolId(Long.parseLong(info.get("tool_id").toString()));
+			Tools t[] = tool.retrieveAllWhere("where tool_id='" + tool.getToolId() + "'");
+			if (t == null || t.length <= 0) {
+				response = new JSONObject();
+				response.put("success", false);
+				response.put("msg", "tool_not_exist");
+				return response.toString();
+			}
+			if (tool.delete()) {
+				response.put("success", true);
+				response.put("msg", "tool_deleted");
+			} else {
+				response.put("success", false);
+				response.put("msg", "failed");
+			}
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("msg", "some exception");
+			MessageLog.printError(e);
+		}
+		return response.toString();
+	}
+
+	public String deleteSkills(String request) {
+		MessageLog.info("In OrganizationService deleteSkills() request= " + request);
+		JSONObject response = new JSONObject();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject info = (JSONObject) parser.parse(request);
+			Skills skill = new Skills();
+			skill.setSkillId(Long.parseLong(info.get("skill_id").toString()));
+			Skills[] s = skill.retrieveAllWhere("where skill_id='" + skill.getSkillId() + "'");
+			if (s == null || s.length <= 0) {
+				response = new JSONObject();
+				response.put("success", false);
+				response.put("msg", "skill_not_exist");
+				return response.toString();
+			}
+			if (skill.delete()) {
+				response.put("success", true);
+				response.put("msg", "skill_deleted");
+			} else {
+				response.put("success", false);
+				response.put("msg", "failed");
+			}
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("msg", "some exception");
 			MessageLog.printError(e);
 		}
 		return response.toString();

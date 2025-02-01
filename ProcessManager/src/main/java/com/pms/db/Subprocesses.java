@@ -106,4 +106,30 @@ public class Subprocesses {
 			session.close();
 		}
 	}
+
+	public boolean delete(Tools tool[]) {
+		MessageLog.info("In Subprocesses delete");
+		Session session = HibernateUtil.pmsSessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			if (tool != null && tool.length > 0) {
+				for (Tools toolObj : tool) {
+					Query query = session.createQuery("delete from Tools where tool_id = :tool_id");
+					query.setParameter("tool_id", toolObj.getToolId());
+					query.executeUpdate();
+				}
+			}
+			Query sheetQuery = session.createQuery("delete from Subprocesses where subprocess_id = :subprocess_id");
+			sheetQuery.setParameter("subprocess_id", this.subprocess_id);
+			int spDeleteStatus = sheetQuery.executeUpdate();
+			transaction.commit();
+			return spDeleteStatus != 0;
+		} catch (Exception e) {
+			MessageLog.printError(e);
+			transaction.rollback();
+			return false;
+		} finally {
+			session.close();
+		}
+	}
 }

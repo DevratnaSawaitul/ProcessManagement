@@ -94,4 +94,37 @@ public class Process {
 			session.close();
 		}
 	}
+
+	public boolean delete(Subprocesses spList[], Tools tool[]) {
+		MessageLog.info("In Process delete");
+		Session session = HibernateUtil.pmsSessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			if (spList != null && spList.length > 0) {
+				for (Subprocesses sp : spList) {
+					Query query = session.createQuery("delete from Subprocesses where subprocess_id = :subprocess_id");
+					query.setParameter("subprocess_id", sp.getSubprocessId());
+					query.executeUpdate();
+				}
+			}
+			if (tool != null && tool.length > 0) {
+				for (Tools sp : tool) {
+					Query query = session.createQuery("delete from Tools where tool_id = :tool_id");
+					query.setParameter("tool_id", sp.getToolId());
+					query.executeUpdate();
+				}
+			}
+			Query sheetQuery = session.createQuery("delete from Process where process_id = :process_id");
+			sheetQuery.setParameter("process_id", this.process_id);
+			int processDeleteStatus = sheetQuery.executeUpdate();
+			transaction.commit();
+			return processDeleteStatus != 0;
+		} catch (Exception e) {
+			MessageLog.printError(e);
+			transaction.rollback();
+			return false;
+		} finally {
+			session.close();
+		}
+	}
 }

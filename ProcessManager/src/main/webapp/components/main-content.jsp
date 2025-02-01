@@ -7,12 +7,12 @@
 
 	<%-- Existing Sheets View --%>
 	<div id="existing-sheets-content" style="display: none;">
-		<%@ include file="/components/open-existing-sheet.jsp"%>
+		<%@ include file="/components/show-existing-sheet.jsp"%>
 	</div>
 
 	<%-- Single Sheet View --%>
 	<div id="single-sheet-content" style="display: none;">
-		<%@ include file="/components/open-single-sheet.jsp"%>
+		<%@ include file="/components/show-single-sheet.jsp"%>
 	</div>
 
 	<%-- Show Process --%>

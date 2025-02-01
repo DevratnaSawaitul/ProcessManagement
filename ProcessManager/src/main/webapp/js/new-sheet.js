@@ -89,7 +89,7 @@ function saveNewSheetData() {
                 case "file_name_already_exist":
                     errorMsg = "File name already exists!";
                     break;
-                case "sheet_add_fail":
+                case "failed":
                     errorMsg = "Failed to add the sheet!";
                     break;
                 default:

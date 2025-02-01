@@ -7,10 +7,9 @@
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/sidebar.css">
 <link rel="stylesheet" href="css/main-content.css">
-<link rel="stylesheet" href="css/modal.css">
 <link rel="stylesheet" href="css/new-sheet.css">
-<link rel="stylesheet" href="css/open-existing-sheet.css">
-<link rel="stylesheet" href="css/open-single-sheet.css">
+<link rel="stylesheet" href="css/show-existing-sheet.css">
+<link rel="stylesheet" href="css/show-single-sheet.css">
 <link rel="stylesheet" href="css/show-skills.css">
 <link rel="stylesheet" href="css/show-tools.css">
 <link rel="stylesheet" href="css/show-sub-process.css">
@@ -21,13 +20,11 @@
 		<%@ include file="/components/sidebar.jsp"%>
 		<%@ include file="/components/main-content.jsp"%>
 	</div>
-	<%@ include file="/components/modal.jsp"%>
 	<%@ include file="/components/new-sheet.jsp"%>
 	<script src="js/sidebar.js"></script>
-	<script src="js/modal.js"></script>
 	<script src="js/new-sheet.js"></script>
-	<script src="js/open-existing-sheet.js"></script>
-	<script src="js/open-single-sheet.js"></script>
+	<script src="js/show-existing-sheet.js"></script>
+	<script src="js/show-single-sheet.js"></script>
 	<script src="js/main-content.js"></script>
 	<script src="js/show-skills.js"></script>
 	<script src="js/show-tools.js"></script>
