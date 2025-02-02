@@ -7,31 +7,31 @@
 
 	<%-- Existing Sheets View --%>
 	<div id="existing-sheets-content" style="display: none;">
-		<%@ include file="/components/show-existing-sheet.jsp"%>
+		<%@ include file="/components/show/show-existing-sheet.jsp"%>
 	</div>
 
 	<%-- Single Sheet View --%>
 	<div id="single-sheet-content" style="display: none;">
-		<%@ include file="/components/show-single-sheet.jsp"%>
+		<%@ include file="/components/show/show-single-sheet.jsp"%>
 	</div>
 
 	<%-- Show Process --%>
 	<div id="show-process" style="display: none;">
-		<%@ include file="/components/show-process.jsp"%>
+		<%@ include file="/components/show/show-process.jsp"%>
 	</div>
 
 	<%-- Show Sub Process --%>
 	<div id="show-sub-process" style="display: none;">
-		<%@ include file="/components/show-sub-process.jsp"%>
+		<%@ include file="/components/show/show-sub-process.jsp"%>
 	</div>
 
 	<%-- Show Tools --%>
 	<div id="show-tools" style="display: none;">
-		<%@ include file="/components/show-tools.jsp"%>
+		<%@ include file="/components/show/show-tools.jsp"%>
 	</div>
 
 	<%-- Show Skills --%>
 	<div id="show-skills" style="display: none;">
-		<%@ include file="/components/show-skills.jsp"%>
+		<%@ include file="/components/show/show-skills.jsp"%>
 	</div>
 </div>

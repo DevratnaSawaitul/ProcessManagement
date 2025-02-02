@@ -6,9 +6,30 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.main-content-subprocesses h2 {
+.subprocess-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    color: #34495e;
+}
+
+.subprocess-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.add-subprocess-btn {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-subprocess-btn:hover {
+    background-color: #2980b9;
 }
 
 /* Table Container */
@@ -52,4 +73,36 @@
 .subprocesses-table td {
     color: #2c3e50;
     font-weight: 400;
+}
+
+/* Shrink action column to fit buttons */
+.subprocesses-table th:last-child,
+.subprocesses-table td:last-child {
+    width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Style buttons to fit properly */
+.action-btn {
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 18px;
+    margin: 0 5px;
+}
+
+.edit-btn {
+    color: #3498db;
+}
+
+.delete-btn {
+    color: #e74c3c;
+}
+
+.edit-btn:hover {
+    color: #2980b9;
+}
+
+.delete-btn:hover {
+    color: #c0392b;
 }
