@@ -67,15 +67,6 @@ function populateProcessTable(processes) {
 }
 
 /**
- * Handles editing a process.
- */
-function editProcess(element) {
-	const process = JSON.parse(element.closest("tr").dataset.process);
-	alert(`Edit process: ${process.process_name} (ID: ${process.process_id})`);
-	// Implement logic to open an edit form/modal and populate fields with `process`
-}
-
-/**
  * Handles deleting a process.
  */
 function deleteProcess(element) {

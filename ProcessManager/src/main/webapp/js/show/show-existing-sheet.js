@@ -2,6 +2,7 @@
  * Fetches all sheet data from the API and displays it in the table.
  */
 function loadExistingSheets() {
+	alert("loading");
 	const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/showSheets"; // API endpoint
 	const jsonData = JSON.stringify({ load_type: "all" });
 

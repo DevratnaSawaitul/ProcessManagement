@@ -1,5 +1,5 @@
-/* New Tools Modal Styles */
-#add-tools-modal {
+/* New Skills Modal Styles */
+#add-skill-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -12,7 +12,7 @@
     z-index: 1000;
 }
 
-#add-tools-modal.show {
+#add-skill-modal.show {
     display: flex;
 }
 
@@ -46,7 +46,6 @@
     margin-bottom: 5px;
 }
 
-.input-field select, 
 .input-field input[type="text"] {
     width: 100%;
     padding: 8px;
@@ -85,4 +84,14 @@ button {
 .cancel-btn {
     background-color: #f44336;
     color: white;
+}
+
+/* Modal Close Animation */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.new-sheet-content {
+    animation: fadeIn 0.3s ease-in-out;
 }

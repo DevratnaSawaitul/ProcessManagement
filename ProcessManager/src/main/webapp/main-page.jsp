@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/show/show-existing-sheet.css">
 <link rel="stylesheet" href="css/show/show-single-sheet.css">
 <link rel="stylesheet" href="css/show/show-skills.css">
+<link rel="stylesheet" href="css/new-forms/new-skills.css">
 <link rel="stylesheet" href="css/show/show-tools.css">
 <link rel="stylesheet" href="css/new-forms/new-tools.css">
 <link rel="stylesheet" href="css/show/show-sub-process.css">
@@ -27,12 +28,14 @@
 	<%@ include file="/components/new-forms/new-process.jsp"%>
 	<%@ include file="/components/new-forms/new-sub-process.jsp"%>
 	<%@ include file="/components/new-forms/new-tools.jsp"%>
+	<%@ include file="/components/new-forms/new-skills.jsp"%>
 	<script src="js/sidebar.js"></script>
 	<script src="js/new-forms/new-sheet.js"></script>
 	<script src="js/show/show-existing-sheet.js"></script>
 	<script src="js/show/show-single-sheet.js"></script>
 	<script src="js/main-content.js"></script>
 	<script src="js/show/show-skills.js"></script>
+	<script src="js/new-forms/new-skills.js"></script>
 	<script src="js/show/show-tools.js"></script>
 	<script src="js/new-forms/new-tools.js"></script>
 	<script src="js/show/show-sub-process.js"></script>

@@ -1,5 +1,8 @@
 package com.pms.service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.xpath.operations.Bool;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -113,6 +116,24 @@ public class OrganizationService {
 						subProcessDetails.put("subprocess_id", s.getSubprocessId());
 						subProcessDetails.put("active", s.getActive());
 						subProcess.add(subProcessDetails);
+					}
+				}
+				response.put("status", true);
+				response.put("sub_process", subProcess);
+			} else if ("active".equalsIgnoreCase(loadType)) {
+				subprocesses = new Subprocesses().retrieveAllWhere(" where active='true' order by subprocess_id desc");
+				Set<String> addedSubProcessNames = new HashSet<>();
+				if (subprocesses != null && subprocesses.length > 0) {
+					for (Subprocesses s : subprocesses) {
+						if (addedSubProcessNames.contains(s.getSubprocessName())) {
+							continue;
+						}
+						subProcessDetails = new JSONObject();
+						subProcessDetails.put("subprocess_name", s.getSubprocessName());
+						subProcessDetails.put("subprocess_id", s.getSubprocessId());
+						subProcessDetails.put("active", s.getActive());
+						subProcess.add(subProcessDetails);
+						addedSubProcessNames.add(s.getSubprocessName());
 					}
 				}
 				response.put("status", true);
@@ -547,8 +568,8 @@ public class OrganizationService {
 				response.put("msg", "process_empty");
 				return response.toString();
 			}
-			Process p[] = process
-					.retrieveAllWhere("where process_id='"+process.getProcessId()+"' and lower(process_name)='" + process.getProcessName().toLowerCase() + "'");
+			Process p[] = process.retrieveAllWhere("where process_id='" + process.getProcessId()
+					+ "' and lower(process_name)='" + process.getProcessName().toLowerCase() + "'");
 			if (p == null || p.length <= 0) {
 				response = new JSONObject();
 				response.put("success", false);
