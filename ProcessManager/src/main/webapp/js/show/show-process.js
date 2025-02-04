@@ -19,14 +19,14 @@ function loadProcesses() {
 	})
 		.then(response => {
 			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
+				throw new Error(`HTTP error! success : ${response.success }`);
 			}
 			return response.json();
 		})
 		.then(data => {
 			tableBody.innerHTML = ""; // Clear loading message
 
-			if (data.status === true && data.processes.length > 0) {
+			if (data.success  === true && data.processes.length > 0) {
 				populateProcessTable(data.processes);
 			} else {
 				tableBody.innerHTML =
@@ -105,13 +105,15 @@ function deleteProcess(element) {
  * Handles editing a process.
  */
 function editProcess(element) {
-    const process = JSON.parse(element.closest("tr").dataset.process);
-    openEditProcessModal(process); // Open modal for editing with process data
+    //const process = JSON.parse(element.closest("tr").dataset.process);
+    //openEditProcessModal(process); // Open modal for editing with process data
+    alert("edit");
 }
 
 /**
  * Handles adding a process.
  */
 function addProcess() {
-    openAddProcessModal(); // Open modal for adding a new process
+    //openAddProcessModal(); // Open modal for adding a new process
+    alert("edit add");
 }

@@ -21,7 +21,7 @@ function loadSubProcesses() {
     .then(data => {
         tableBody.innerHTML = "";
 
-        if (data.status && data.sub_process.length > 0) {
+        if (data.success  && data.sub_process.length > 0) {
             populateSubProcessTable(data.sub_process);
         } else {
             tableBody.innerHTML = "<tr><td colspan='4'>No sub-processes available.</td></tr>";

@@ -1,8 +1,7 @@
-/* Modal container styling */
+/* New Sheet Modal Styles */
 #new-sheet-modal {
     display: none;
     position: fixed;
-    z-index: 10;
     top: 0;
     left: 0;
     width: 100%;
@@ -10,164 +9,93 @@
     background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
-/* Show the modal when triggered */
 #new-sheet-modal.show {
     display: flex;
 }
 
-/* Modal content styling */
 .new-sheet-content {
-    background-color: #ffffff;
+    background-color: #fff;
+    width: 450px;
+    max-width: 100%;
     padding: 20px;
-    border-radius: 10px;
-    width: 40%;
-    max-height: 80%;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
-/* Header styling */
 .new-sheet-header {
-    font-size: 1.5rem;
+    font-size: 18px;
     font-weight: bold;
+    margin-bottom: 15px;
     text-align: center;
-    position: sticky;
-    top: 0;
-    background-color: #ffffff;
-    padding-bottom: 10px;
-    z-index: 1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Form fields styling */
 .new-sheet-body {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    overflow-y: auto;  /* Allow scrolling when content overflows */
-    padding-bottom: 15px; /* Space for the footer */
-    padding-top: 15px;
-    padding-left: 5px;
-    padding-right: 15px; /* Add right padding to prevent overlap with scrollbar */
+    margin-bottom: 20px;
 }
 
-/* Label styling */
-.new-sheet-body label {
-    font-weight: bold;
-    color: #333;
+.input-field {
+    margin-bottom: 15px;
 }
 
-/* Input fields styling */
-.new-sheet-body input {
+.input-field label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.input-field input[type="text"] {
     width: 100%;
-    padding: 10px;
-    padding-left: 5px;
-    padding-right: 20px; /* Ensure input field text doesn't overlap the scrollbar */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-/* Footer buttons styling */
 .new-sheet-footer {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 10px;
-    position: sticky;
-    bottom: 0;
-    background-color: #ffffff;
-    padding-top: 10px;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1;
+    justify-content: space-between;
 }
 
-/* Button styling */
-.new-sheet-footer button {
+button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    font-size: 14px;
     cursor: pointer;
-    font-size: 1rem;
 }
 
-/* Save button styling */
 .save-btn {
     background-color: #4CAF50;
-    color: #ffffff;
-    transition: background-color 0.3s;
-}
-
-.save-btn:hover {
-    background-color: #45a049;
+    color: white;
 }
 
 .save-btn:disabled {
-    background-color: #c8e6c9;
+    background-color: #ccc;
     cursor: not-allowed;
 }
 
-/* Cancel button styling */
 .cancel-btn {
-    background-color: #e74c3c;
-    color: #ffffff;
-    transition: background-color 0.3s;
+    background-color: #f44336;
+    color: white;
 }
 
-.cancel-btn:hover {
-    background-color: #c0392b;
+/* Scrollable Modal */
+.new-sheet-content {
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
-/* Scrollbar styling */
-.new-sheet-body::-webkit-scrollbar {
-    width: 6px;  /* Make the scrollbar thinner */
-    height: 6px; /* For horizontal scrollbar (if needed) */
+/* Modal Animation */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
-/* Style the thumb (draggable part) */
-.new-sheet-body::-webkit-scrollbar-thumb {
-    background-color: #888;  /* Color of the scrollbar thumb */
-    border-radius: 5px;  /* Rounded corners */
-    transition: background-color 0.3s ease;
-}
-
-.new-sheet-body::-webkit-scrollbar-thumb:hover {
-    background-color: #555;  /* Darker color on hover */
-}
-
-/* Style the track (background of scrollbar) */
-.new-sheet-body::-webkit-scrollbar-track {
-    background-color: #f1f1f1;  /* Track color */
-    border-radius: 5px;  /* Rounded corners */
-}
-
-/* Optionally add for the track (where thumb slides) */
-.new-sheet-body::-webkit-scrollbar-corner {
-    background-color: #f1f1f1;
-}
-
-
-/* Loader Styling */
-.loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 8px solid #f3f3f3; /* Light gray */
-    border-top: 8px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-}
-
-/* Keyframes for spinning animation */
-@keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
+.new-sheet-content {
+    animation: fadeIn 0.3s ease-in-out;
 }

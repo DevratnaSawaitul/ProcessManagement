@@ -12,8 +12,7 @@
             <span>Menu</span>
         </div>
         <div class="sidebar-buttons">
-            <button onclick="openNewSheetModal()">+ Add New Sheet</button>
-            <button onclick="showView('existing-sheets-content')">Open Existing Sheets</button>
+            <button onclick="showView('existing-sheets-content')">Sheets</button>
 
             <!-- Organization Module -->
             <button onclick="toggleOrganization()">Organization</button>
@@ -25,7 +24,7 @@
             </div>
 
             <!-- Recent Sheets Module -->
-            <button onclick="toggleRecentSheets()">Recent Sheets</button>
+            <button onclick="toggleRecentSheets()">Recents</button>
             <div class="recent-sheets" id="recent-sheets">
                 <!-- Recent sheets will be populated dynamically -->
             </div>

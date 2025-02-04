@@ -38,10 +38,10 @@ public class OrganizationService {
 						processJsonObj.put("active", s1.getActive());
 						processJsonArray.add(processJsonObj);
 					}
-					response.put("status", true);
+					response.put("success", true);
 					response.put("processes", processJsonArray);
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "no_process_found");
 				}
 			} else if ("all".equalsIgnoreCase(loadType)) {
@@ -55,15 +55,15 @@ public class OrganizationService {
 						processJsonArray.add(processJsonObj);
 					}
 				}
-				response.put("status", true);
+				response.put("success", true);
 				response.put("processes", processJsonArray);
 			} else {
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "invalid_load_type");
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}
@@ -86,7 +86,7 @@ public class OrganizationService {
 					subprocesses = new Subprocesses()
 							.retrieveAllWhere(" where process_name='" + process + "' and active='true'");
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "process_name_required");
 					return response.toString();
 				}
@@ -100,10 +100,10 @@ public class OrganizationService {
 						subProcessDetails.put("active", s1.getActive());
 						subProcess.add(subProcessDetails);
 					}
-					response.put("status", true);
+					response.put("success", true);
 					response.put("sub_process", subProcess);
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "no_sub_process_found");
 				}
 			} else if ("all".equalsIgnoreCase(loadType)) {
@@ -118,7 +118,7 @@ public class OrganizationService {
 						subProcess.add(subProcessDetails);
 					}
 				}
-				response.put("status", true);
+				response.put("success", true);
 				response.put("sub_process", subProcess);
 			} else if ("active".equalsIgnoreCase(loadType)) {
 				subprocesses = new Subprocesses().retrieveAllWhere(" where active='true' order by subprocess_id desc");
@@ -136,15 +136,15 @@ public class OrganizationService {
 						addedSubProcessNames.add(s.getSubprocessName());
 					}
 				}
-				response.put("status", true);
+				response.put("success", true);
 				response.put("sub_process", subProcess);
 			} else {
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "invalid_load_type");
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}
@@ -166,7 +166,7 @@ public class OrganizationService {
 				if (!sub_process.isEmpty()) {
 					tools = new Tools().retrieveAllWhere(" where sub_process='" + sub_process + "' and active='true'");
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "sub_process_required");
 					return response.toString();
 				}
@@ -180,10 +180,10 @@ public class OrganizationService {
 						toolsJSONObj.put("active", s1.getActive());
 						toolsJSONArray.add(toolsJSONObj);
 					}
-					response.put("status", true);
+					response.put("success", true);
 					response.put("tools", toolsJSONArray);
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "no_tools_found_related_to_subprocess");
 				}
 			} else if ("all".equalsIgnoreCase(loadType)) {
@@ -198,15 +198,15 @@ public class OrganizationService {
 						toolsJSONArray.add(toolsJSONObj);
 					}
 				}
-				response.put("status", true);
+				response.put("success", true);
 				response.put("tools", toolsJSONArray);
 			} else {
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "invalid_load_type");
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}
@@ -234,10 +234,10 @@ public class OrganizationService {
 						skillsJSONObj.put("active", s1.getActive());
 						skillsJSONArray.add(skillsJSONObj);
 					}
-					response.put("status", true);
+					response.put("success", true);
 					response.put("skills", skillsJSONArray);
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "no_active_skills_found");
 				}
 			} else if ("all".equalsIgnoreCase(loadType)) {
@@ -251,15 +251,15 @@ public class OrganizationService {
 						skillsJSONArray.add(skillsJSONObj);
 					}
 				}
-				response.put("status", true);
+				response.put("success", true);
 				response.put("skills", skillsJSONArray);
 			} else {
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "invalid_load_type");
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}
@@ -278,7 +278,7 @@ public class OrganizationService {
 			String process_name = info.get("process_name") != null ? info.get("process_name").toString().trim() : "";
 			if (process_name.isEmpty()) {
 				response = new JSONObject();
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "process_name_is_manadatory");
 				return response.toString();
 			}
@@ -288,7 +288,7 @@ public class OrganizationService {
 			if (operation.equalsIgnoreCase("add")) {
 				if (p1 != null && p1.length > 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "already_exist");
 					return response.toString();
 				}
@@ -296,17 +296,17 @@ public class OrganizationService {
 				p.setActive(true);
 				if (p.insert()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "process_added");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			} else if (operation.equalsIgnoreCase("update")) {
 				if (p1 == null || p1.length <= 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "process_name_not_exist");
 					return response.toString();
 				}
@@ -314,17 +314,17 @@ public class OrganizationService {
 				p.setActive(active);
 				if (p.update()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "process_updated");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}
@@ -345,13 +345,13 @@ public class OrganizationService {
 					: "";
 			if (subprocess_name.isEmpty()) {
 				response = new JSONObject();
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "subprocess_name_is_manadatory");
 				return response.toString();
 			}
 			if (process_name.isEmpty()) {
 				response = new JSONObject();
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "process_name_is_manadatory");
 				return response.toString();
 			}
@@ -370,7 +370,7 @@ public class OrganizationService {
 			if (operation.equalsIgnoreCase("add")) {
 				if (p1 != null && p1.length > 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "already_exist");
 					return response.toString();
 				}
@@ -379,17 +379,17 @@ public class OrganizationService {
 				p.setActive(true);
 				if (p.insert()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "sub_process_added");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			} else if (operation.equalsIgnoreCase("update")) {
 				if (p1 == null || p1.length <= 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "not_exist");
 					return response.toString();
 				}
@@ -398,17 +398,17 @@ public class OrganizationService {
 				p.setActive(active);
 				if (p.update()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "sub_process_updated");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}
@@ -428,13 +428,13 @@ public class OrganizationService {
 			String sub_process = info.get("sub_process") != null ? info.get("sub_process").toString().trim() : "";
 			if (sub_process.isEmpty()) {
 				response = new JSONObject();
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "subprocess_name_is_manadatory");
 				return response.toString();
 			}
 			if (tool_name.isEmpty()) {
 				response = new JSONObject();
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "tool_name_is_manadatory");
 				return response.toString();
 			}
@@ -444,7 +444,7 @@ public class OrganizationService {
 			if (operation.equalsIgnoreCase("add")) {
 				if (t1 != null && t1.length > 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "already_exist");
 					return response.toString();
 				}
@@ -453,17 +453,17 @@ public class OrganizationService {
 				t.setToolName(tool_name);
 				if (t.insert()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "tool_added");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			} else if (operation.equalsIgnoreCase("update")) {
 				if (t1 == null || t1.length <= 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "not_exist");
 					return response.toString();
 				}
@@ -472,17 +472,17 @@ public class OrganizationService {
 				t.setToolName(tool_name);
 				if (t.update()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "tool_updated");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}
@@ -501,7 +501,7 @@ public class OrganizationService {
 			String skill_name = info.get("skill_name") != null ? info.get("skill_name").toString().trim() : "";
 			if (skill_name.isEmpty()) {
 				response = new JSONObject();
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "skill_name_is_manadatory");
 				return response.toString();
 			}
@@ -510,7 +510,7 @@ public class OrganizationService {
 			if (operation.equalsIgnoreCase("add")) {
 				if (s1 != null && s1.length > 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "already_exist");
 					return response.toString();
 				}
@@ -518,17 +518,17 @@ public class OrganizationService {
 				s.setActive(true);
 				if (s.insert()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "skill_added");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			} else if (operation.equalsIgnoreCase("update")) {
 				if (s1 == null || s1.length <= 0) {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "skill_name_not_exist");
 					return response.toString();
 				}
@@ -536,17 +536,17 @@ public class OrganizationService {
 				s.setActive(active);
 				if (s.update()) {
 					response = new JSONObject();
-					response.put("status", true);
+					response.put("success", true);
 					response.put("message", "skill_updated");
 				} else {
 					response = new JSONObject();
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "failed");
 				}
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "some exception");
 			MessageLog.printError(e);
 		}

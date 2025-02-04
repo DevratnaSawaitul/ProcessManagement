@@ -58,7 +58,7 @@ function fetchRecentSheets() {
         return response.json();
     })
     .then(data => {
-        if (data.status === "success") {
+        if (data.success) {
             recentSheetsContainer.innerHTML = "";
             data.recentSheets.forEach(sheet => {
                 const sheetElement = document.createElement("div");

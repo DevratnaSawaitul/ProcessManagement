@@ -24,19 +24,11 @@ public class SheetController {
 	}
 
 	@POST
-	@Path("/addSheets")
+	@Path("/add_sheets")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String addSheets(String request) {
-		return new SheetService().addSheets(request);
-	}
-
-	@POST
-	@Path("/updateSheet")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String updateSheet(String request) {
-		return new SheetService().updateSheet(request);
+	public String addSheet(String request) {
+		return new SheetService().saveSheet(request);
 	}
 
 	@POST

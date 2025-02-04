@@ -21,7 +21,7 @@ function loadTools() {
     .then(data => {
         tableBody.innerHTML = "";
 
-        if (data.status && data.tools.length > 0) {
+        if (data.success  && data.tools.length > 0) {
             populateToolsTable(data.tools);
         } else {
             tableBody.innerHTML = "<tr><td colspan='4'>No tools available.</td></tr>";

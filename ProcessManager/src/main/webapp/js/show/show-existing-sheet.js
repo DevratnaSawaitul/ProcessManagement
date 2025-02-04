@@ -1,86 +1,149 @@
+document.addEventListener("DOMContentLoaded", () => {
+	loadExistingSheets();
+});
+
 /**
- * Fetches all sheet data from the API and displays it in the table.
+ * Fetches all sheets from the API and displays them.
  */
 function loadExistingSheets() {
-	alert("loading");
-	const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/showSheets"; // API endpoint
+	const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/showSheets";
 	const jsonData = JSON.stringify({ load_type: "all" });
 
 	const tableBody = document.getElementById("sheets-table-body-existing-sheet");
-
-	// Clear any previous rows and show a loading message
-	tableBody.innerHTML = "<tr><td colspan='8'>Loading...</td></tr>";
+	tableBody.innerHTML = "<tr><td colspan='9'>Loading...</td></tr>";
 
 	fetch(apiUrl, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		headers: { "Content-Type": "application/json" },
 		body: jsonData,
 	})
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-			return response.json();
-		})
-		.then((data) => {
-			// Remove loading message once data is received
-			tableBody.innerHTML = ""; // Clear the loading message
+		.then(response => response.json())
+		.then(data => {
+			tableBody.innerHTML = ""; // Clear loading message
 
-			if (data.status === true && data.sheets.length > 0) {
-				populateTable(data.sheets);
+			if (data.success === true && data.sheets.length > 0) {
+				populateSheetTable(data.sheets);
 			} else {
-				tableBody.innerHTML =
-					"<tr><td colspan='8'>No sheets available to display.</td></tr>";
+				tableBody.innerHTML = "<tr><td colspan='9'>No sheets available.</td></tr>";
 			}
 		})
-		.catch((error) => {
-			console.error("Error fetching sheets data:", error);
-			tableBody.innerHTML = `<tr><td colspan='8'>Error: ${error.message}</td></tr>`;
+		.catch(error => {
+			console.error("Error fetching sheets:", error);
+			tableBody.innerHTML = `<tr><td colspan='9'>Error: ${error.message}</td></tr>`;
 		});
 }
 
 /**
- * Populates the table with the fetched sheet data.
- * @param {Array} sheets - Array of sheet objects returned from the API.
+ * Populates the table with sheet data.
  */
-function populateTable(sheets) {
+function populateSheetTable(sheets) {
 	const tableBody = document.getElementById("sheets-table-body-existing-sheet");
-	sheets.forEach((sheet) => {
-		// Parse the date fields and format them if needed
-		const formattedDate = formatDate(sheet.date);
-		const formattedLastUpdated = formatDate(sheet.date_of_last_update);
+	tableBody.innerHTML = "";
 
+	sheets.forEach(sheet => {
 		const row = document.createElement("tr");
+		row.dataset.sheet = JSON.stringify(sheet); // Store sheet object in dataset
+
 		row.innerHTML = `
             <td>${sheet.file_name}</td>
             <td>${sheet.design_no}</td>
             <td>${sheet.department}</td>
             <td>${sheet.floor}</td>
-            <td>${formattedDate}</td>  <!-- Use formatted date here -->
+            <td>${formatDate(sheet.date)}</td>
             <td>${sheet.last_updated_by}</td>
-            <td>${formattedLastUpdated}</td> <!-- Use formatted last update date here -->
+            <td>${sheet.date_of_last_update}</td>
             <td>${sheet.version}</td>
+            <td>
+                <span class="action-btn edit-btn" title="Edit Sheet" onclick="editSheet(this)">
+                    <font face="Arial">&#x270E;</font> <!-- ✎ Edit Icon -->
+                </span>
+                <span class="action-btn delete-btn" title="Delete Sheet" onclick="deleteSheet(this)">
+                    <font face="Arial">&#x1F5D1;</font> <!-- 🗑 Delete Icon -->
+                </span>
+            </td>
         `;
+
+		// Show alert and open single sheet view on row click
+		row.addEventListener("click", (event) => {
+			if (!event.target.closest(".action-btn")) {
+				alert(`Sheet ID: ${sheet.sheet_id}`);
+
+				// Show the single sheet content view
+				showView('single-sheet-content');
+
+				// Load the sheet data
+				loadSingleSheets(sheet.file_name);
+			}
+		});
+
 		tableBody.appendChild(row);
 	});
 }
 
-// Helper function to format the date properly
+/**
+ * Handles deleting a sheet.
+ */
+function deleteSheet(element) {
+	const sheet = JSON.parse(element.closest("tr").dataset.sheet);
+
+	if (!confirm(`Are you sure you want to delete "${sheet.file_name}"?`)) {
+		return; // User canceled deletion
+	}
+
+	const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/deleteSheet";
+	const requestData = JSON.stringify({ sheet_id: sheet.sheet_id, file_name: sheet.file_name });
+
+	fetch(apiUrl, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: requestData,
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				alert("Sheet deleted successfully!");
+				loadExistingSheets();
+			} else {
+				alert(`Failed to delete sheet: ${data.msg || "Unknown error"}`);
+			}
+		})
+		.catch(error => {
+			console.error("Error deleting sheet:", error);
+			alert(`Error: ${error.message}`);
+		});
+}
+
+/**
+ * Handles editing a sheet.
+ */
+function editSheet(element) {
+	const sheet = JSON.parse(element.closest("tr").dataset.sheet);
+	openEditSheetModal(sheet); // Open modal with sheet data
+	//alert("edit sheet");
+}
+
+/**
+ * Handles adding a new sheet.
+ */
+function addSheet() {
+	openAddSheetModal(); // Open modal for new sheet
+	//alert("add");
+}
+
+/**
+ * Helper function to format the date properly.
+ */
 function formatDate(dateString) {
-	// Handle edge cases for date formatting
-	if (!dateString || dateString === '01-01-1') {
-		return "N/A"; // Return 'N/A' for invalid or placeholder dates
+	if (!dateString || dateString === "01-01-1") {
+		return "N/A";
 	}
 	const date = new Date(dateString);
 	if (isNaN(date)) {
-		return dateString; // If it's an invalid date, return the original string
+		return dateString;
 	}
 
-	// Format the date to 'dd-mm-yyyy' format
 	const day = String(date.getDate()).padStart(2, "0");
-	const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+	const month = String(date.getMonth() + 1).padStart(2, "0");
 	const year = date.getFullYear();
 	return `${day}-${month}-${year}`;
 }

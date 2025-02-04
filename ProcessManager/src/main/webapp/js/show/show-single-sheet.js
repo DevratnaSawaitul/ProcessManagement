@@ -1,15 +1,3 @@
-/**
- * Fetches all sheet data from the API and displays it in the table.
- */
-
-/*function loadSingleSheets(sheet) {
-	const tableBody = document.getElementById("single-sheet");
-	tableBody.innerHTML = sheet;
-}*/
-
-/**
- * Fetches all sheet data from the API and displays it in the table.
- */
 function loadSingleSheets(sheet) {
     const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/showSheets"; // API endpoint
     const jsonData = JSON.stringify({ load_type: "singleSheet",file_name:sheet });
@@ -28,7 +16,7 @@ function loadSingleSheets(sheet) {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`HTTP error! success : ${response.success }`);
             }
             return response.json();
         })
@@ -36,7 +24,7 @@ function loadSingleSheets(sheet) {
             // Remove loading message once data is received
             tableBody.innerHTML = ""; // Clear the loading message
 
-            if (data.status === true && data.sheets.length > 0) {
+            if (data.success  === true && data.sheets.length > 0) {
                 populateSingleTable(data.sheets);
             } else {
                 tableBody.innerHTML =

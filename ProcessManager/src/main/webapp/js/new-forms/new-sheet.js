@@ -1,141 +1,119 @@
-// Select the modal and related elements
-const newSheetModal = document.getElementById("new-sheet-modal");
-const saveButton = document.getElementById("saveBtn");
+// Select modal and related elements
+const sheetModal = document.getElementById("new-sheet-modal");
+const saveSheetButton = document.getElementById("save-sheet-btn");
 
-// Select all input fields
-const inputFields = document.querySelectorAll('.new-sheet-body input');
+// Validate sheet inputs and enable Save button only when all fields are filled
+function validateSheetInputs() {
+    const fileName = document.getElementById("sheet-file-name").value.trim();
+    const version = document.getElementById("sheet-version").value.trim();
+    const designNo = document.getElementById("sheet-design-no").value.trim();
+    const department = document.getElementById("sheet-department").value.trim();
+    const floor = document.getElementById("sheet-floor").value.trim();
+    const lastUpdatedBy = document.getElementById("sheet-last-updated-by").value.trim();
 
-/**
- * Opens the "Add New Sheet" modal and clears the fields.
- */
-function openNewSheetModal() {
-    // Clear all fields when opening the form
-    inputFields.forEach(input => input.value = "");
-    saveButton.disabled = true; // Initially disable the save button
-    newSheetModal.classList.add("show");
+    // Enable Save button only if all fields are filled
+    saveSheetButton.disabled = !(fileName && version && designNo && department && floor && lastUpdatedBy);
 }
 
-/**
- * Closes the "Add New Sheet" modal.
- */
-function closeNewSheetModal() {
-    newSheetModal.classList.remove("show");
+// Open the Add Sheet modal
+function openAddSheetModal() {
+    document.getElementById("sheet-file-name").value = "";
+    document.getElementById("sheet-file-name").removeAttribute("readonly");
+    document.getElementById("sheet-version").value = "";
+    document.getElementById("sheet-design-no").value = "";
+    document.getElementById("sheet-department").value = "";
+    document.getElementById("sheet-floor").value = "";
+    document.getElementById("sheet-last-updated-by").value = "";
+
+    // Store operation type
+    const fileNameField = document.getElementById("sheet-file-name");
+    fileNameField.dataset.operation = "add";
+    fileNameField.dataset.date = ""; // No date for new sheets
+
+    saveSheetButton.disabled = true; // Initially disabled
+    document.getElementById("new-sheet-title").textContent = "Add Sheet";
+    sheetModal.classList.add("show");
 }
-function saveNewSheetData() {
-    // Disable the save button to prevent multiple submissions
-    saveButton.disabled = true;
 
-    // Show the loader
-    document.getElementById("loader").style.display = "block"; // Show loader
+// Open the Edit Sheet modal
+function openEditSheetModal(sheet) {
+    document.getElementById("sheet-file-name").value = sheet.file_name;
+    document.getElementById("sheet-version").value = sheet.version;
+    document.getElementById("sheet-design-no").value = sheet.design_no;
+    document.getElementById("sheet-department").value = sheet.department;
+    document.getElementById("sheet-floor").value = sheet.floor;
+    document.getElementById("sheet-last-updated-by").value = sheet.last_updated_by;
 
-    // Get the values from the input fields
-    const data = {
-        file_name: document.getElementById("fileName").value,
-        version: document.getElementById("version").value,
-        date: formatDate(document.getElementById("date").value), // Format date
-        department: document.getElementById("department").value,
-        design_no: document.getElementById("designNo").value,
-        floor: document.getElementById("floor").value,
-        last_updated_by: document.getElementById("lastUpdatedBy").value,
+    // Make file_name readonly and store operation
+    const fileNameField = document.getElementById("sheet-file-name");
+    fileNameField.setAttribute("readonly", "true");
+    fileNameField.dataset.operation = "update";
+
+    // Store the existing date for update
+    fileNameField.dataset.date = sheet.date;
+
+    validateSheetInputs(); // Ensure Save button reflects the field states
+    document.getElementById("new-sheet-title").textContent = "Edit Sheet";
+    sheetModal.classList.add("show");
+}
+
+// Close the Sheet modal
+function closeSheetModal() {
+    sheetModal.classList.remove("show");
+}
+
+// Save the new or edited sheet
+function saveSheetData() {
+    const fileName = document.getElementById("sheet-file-name").value.trim();
+    const version = document.getElementById("sheet-version").value.trim();
+    const designNo = document.getElementById("sheet-design-no").value.trim();
+    const department = document.getElementById("sheet-department").value.trim();
+    const floor = document.getElementById("sheet-floor").value.trim();
+    const lastUpdatedBy = document.getElementById("sheet-last-updated-by").value.trim();
+
+    const operation = document.getElementById("sheet-file-name").dataset.operation || "add";
+    const existingDate = document.getElementById("sheet-file-name").dataset.date || ""; // Get stored date (for update)
+
+    // Prepare request payload
+    const requestData = {
+        file_name: fileName,
+        version: version,
+        department: department,
+        design_no: designNo,
+        floor: floor,
+        last_updated_by: lastUpdatedBy
     };
 
-    // Validate inputs
-    for (const key in data) {
-        if (!data[key]) {
-            alert(`${key} cannot be empty!`);
-            document.getElementById("loader").style.display = "none"; // Hide loader if validation fails
-            saveButton.disabled = false; // Re-enable the save button
-            return;
-        }
+    // **Only add the date field if it's an update and use the existing date**
+    if (operation === "update" && existingDate) {
+        requestData.date = existingDate;
+        requestData.operation = "update";
+    } else {
+        requestData.operation = "add";
     }
 
-    // Stringify the data
-    const jsonData = JSON.stringify(data);
+    // Determine API URL
+    const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/add_sheets";
 
-    // API URL
-    const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/addSheets"; // API URL
-
-    // Fetch the data from the API
+    // API Call
     fetch(apiUrl, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: jsonData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData)
     })
-    .then(function(response) {
-        // Handle non-OK responses (e.g., 404, 500)
-        if (!response.ok) {
-            throw new Error("HTTP error! Status: " + response.status);
-        }
-        // Parse the JSON response from the API
-        return response.json();
-    })
-    .then(function(data) {
-        // Hide the loader
-        document.getElementById("loader").style.display = "none"; // Hide loader
-
-        // Check the status in the response data
+    .then(response => response.json())
+    .then(data => {
         if (data.success) {
-            // Successfully added the sheet
-            alert("Sheet saved successfully!");
-            closeNewSheetModal();
-            fetchRecentSheets();
-            loadExistingSheets();
+            alert(`Sheet ${operation === "add" ? "added" : "updated"} successfully!`);
+            loadExistingSheets(); // Refresh sheet list
         } else {
-            // Handle failure cases
-            let errorMsg = "";
-            switch(data.msg) {
-                case "file_name_already_exist":
-                    errorMsg = "File name already exists!";
-                    break;
-                case "failed":
-                    errorMsg = "Failed to add the sheet!";
-                    break;
-                default:
-                    errorMsg = "An unknown error occurred!";
-                    break;
-            }
-            alert(errorMsg);
+            alert(data.msg === "file_name_already_exist" ? "File name already exists!" : "Error occurred!");
         }
     })
-    .catch(function(error) {
-        // Hide the loader in case of error
-        document.getElementById("loader").style.display = "none"; // Hide loader
-
-        // Handle errors during fetch or JSON parsing
-        console.error("Error during API call:", error);
-        alert("An unexpected error occurred.");
-
-        // Re-enable the save button in case of error
-        saveButton.disabled = false;
+    .catch(error => {
+        console.error("Error saving sheet data:", error);
+        alert("An error occurred while saving the sheet.");
     });
-}
 
-/**
- * Function to format the date as "dd-mm-yyyy hh:mm:ss"
- */
-function formatDate(inputDate) {
-    if (!inputDate) return ""; // Handle empty date
-
-    const date = new Date(inputDate);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-}
-
-/**
- * Function to check if all fields are filled and enables the save button accordingly
- */
-function validateInputs() {
-    const allFieldsFilled = Array.from(inputFields).every(input => {
-        // Special handling for date input field
-        if (input.type === "date") {
-            return input.value.trim() !== ""; // Ensure date is not empty
-        }
-        return input.value.trim() !== ""; // Standard check for all other input fields
-    });
-    
-    saveButton.disabled = !allFieldsFilled; // Enable save button if all fields are filled
+    closeSheetModal();
 }

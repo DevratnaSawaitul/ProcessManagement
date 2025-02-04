@@ -1,5 +1,6 @@
 package com.pms.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -27,11 +28,11 @@ public class SheetService {
 					sheets.add(s1.getFileName());
 				}
 			}
-			response.put("status", "success");
+			response.put("success", true);
 			response.put("recentSheets", sheets);
 		} catch (Exception e) {
 			// Handle any unexpected errors
-			response.put("status", "error");
+			response.put("success", false);
 			response.put("message", e.getMessage());
 		}
 		return response.toString();
@@ -52,7 +53,7 @@ public class SheetService {
 				if (!fileName.isEmpty()) {
 					s = new Sheets().retrieveAllWhere(" where file_name='" + fileName + "'");
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "sheet_id_or_file_name_required");
 					return response.toString();
 				}
@@ -105,11 +106,11 @@ public class SheetService {
 							sheetProcessArr.add(sheetProcessObj);
 						}
 					}
-					response.put("status", true);
+					response.put("success", true);
 					response.put("sheets", sheets);
 					response.put("sheet_process", sheetProcessArr);
 				} else {
-					response.put("status", false);
+					response.put("success", false);
 					response.put("message", "sheet_not_found");
 				}
 			} else if ("all".equalsIgnoreCase(loadType)) {
@@ -130,98 +131,90 @@ public class SheetService {
 						sheets.add(sheetDetails);
 					}
 				}
-				response.put("status", true);
+				response.put("success", true);
 				response.put("sheets", sheets);
 			} else {
-				response.put("status", false);
+				response.put("success", false);
 				response.put("message", "invalid_load_type");
 			}
 		} catch (Exception e) {
 			response = new JSONObject();
-			response.put("status", false);
+			response.put("success", false);
 			response.put("message", "exception");
 			MessageLog.printError(e);
 		}
 		return response.toString();
 	}
 
-	public static String addSheets(String request) {
-		MessageLog.info("In SheetService addSheets() request= " + request);
-		String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+	public static String saveSheet(String request) {
+		MessageLog.info("In SheetService saveSheet() request= " + request);
+		String currentTime = LocalDateTime.now()
+				.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH));
+		String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH));
 		JSONObject response = new JSONObject();
 		JSONParser parser = new JSONParser();
 		try {
 			JSONObject info = (JSONObject) parser.parse(request);
 			Sheets s = new Sheets();
 			s.setFileName(info.get("file_name") != null ? info.get("file_name").toString().trim() : "");
+
 			if (s.getFileName().isEmpty()) {
 				response.put("success", false);
 				response.put("msg", "file_name_empty");
 				return response.toString();
 			}
-			Sheets sList[] = s.retrieveAllWhere(" where lower(file_name)='" + s.getFileName().toLowerCase() + "'");
-			if (sList != null && sList.length > 0) {
-				response.put("success", false);
-				response.put("msg", "file_name_already_exist");
-				return response.toString();
-			}
-			s.setVersion(info.get("version") != null ? (String) info.get("version") : "1.0");
-			s.setDate(info.get("date") != null ? (String) info.get("date") : "");
-			s.setDepartment(info.get("department") != null ? (String) info.get("department") : "");
-			s.setDesignNo(info.get("design_no") != null ? (String) info.get("design_no") : "");
-			s.setFloor(info.get("floor") != null ? (String) info.get("floor") : "");
-			s.setLastUpdatedBy(info.get("last_updated_by") != null ? (String) info.get("last_updated_by") : "");
-			s.setDateOfLastUpdate(currentTime);
 
-			if (s.insert()) {
-				response.put("success", true);
-				response.put("msg", "sheet_added");
-			} else {
-				response.put("success", false);
-				response.put("msg", "failed");
-			}
-		} catch (Exception e) {
-			response.put("success", false);
-			response.put("msg", "some exception");
-			MessageLog.printError(e);
-		}
-		return response.toString();
-	}
-
-	public static String updateSheet(String request) {
-		MessageLog.info("In SheetService updateSheet() request= " + request);
-		String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-		JSONObject response = new JSONObject();
-		JSONParser parser = new JSONParser();
-		try {
-			JSONObject info = (JSONObject) parser.parse(request);
-			Sheets s = new Sheets();
-			s.setFileName(info.get("file_name") != null ? info.get("file_name").toString().trim() : "");
-			if (s.getFileName().isEmpty()) {
-				response.put("success", false);
-				response.put("msg", "file_name_empty");
-				return response.toString();
-			}
+			// Check if the sheet exists (for update logic)
 			Sheets sList[] = s.retrieveAllWhere(" where lower(file_name)='" + s.getFileName().toLowerCase() + "'");
+
+			// If no existing sheet is found, proceed with adding
 			if (sList == null || sList.length <= 0) {
-				response.put("success", false);
-				response.put("msg", "file_name_not_exist");
-				return response.toString();
-			}
-			s.setVersion(info.get("version") != null ? (String) info.get("version") : "1.0");
-			s.setDate(info.get("date") != null ? (String) info.get("date") : "");
-			s.setDepartment(info.get("department") != null ? (String) info.get("department") : "");
-			s.setDesignNo(info.get("design_no") != null ? (String) info.get("design_no") : "");
-			s.setFloor(info.get("floor") != null ? (String) info.get("floor") : "");
-			s.setLastUpdatedBy(info.get("last_updated_by") != null ? (String) info.get("last_updated_by") : "");
-			s.setDateOfLastUpdate(currentTime);
+				if (info.get("operation").equals("update")) {
+					response.put("success", false);
+					response.put("msg", "file_name_not_exist");
+					return response.toString();
+				}
 
-			if (s.update()) {
-				response.put("success", true);
-				response.put("msg", "sheet_updated");
+				// Add sheet logic
+				s.setVersion(info.get("version") != null ? (String) info.get("version") : "1.0");
+				s.setDate(currentDate);
+				s.setDepartment(info.get("department") != null ? (String) info.get("department") : "");
+				s.setDesignNo(info.get("design_no") != null ? (String) info.get("design_no") : "");
+				s.setFloor(info.get("floor") != null ? (String) info.get("floor") : "");
+				s.setLastUpdatedBy(info.get("last_updated_by") != null ? (String) info.get("last_updated_by") : "");
+				s.setDateOfLastUpdate(currentTime);
+
+				if (s.insert()) {
+					response.put("success", true);
+					response.put("msg", "sheet_added");
+				} else {
+					response.put("success", false);
+					response.put("msg", "failed");
+				}
 			} else {
-				response.put("success", false);
-				response.put("msg", "failed");
+				// Update sheet logic
+				if (info.get("operation").equals("add")) {
+					response.put("success", false);
+					response.put("msg", "file_name_already_exist");
+					return response.toString();
+				}
+
+				s.setVersion(info.get("version") != null ? (String) info.get("version") : "1.0");
+				s.setDate(info.get("date") != null ? (String) info.get("date") : "");
+				s.setDepartment(info.get("department") != null ? (String) info.get("department") : "");
+				s.setDesignNo(info.get("design_no") != null ? (String) info.get("design_no") : "");
+				s.setFloor(info.get("floor") != null ? (String) info.get("floor") : "");
+				s.setLastUpdatedBy(info.get("last_updated_by") != null ? (String) info.get("last_updated_by") : "");
+				s.setDateOfLastUpdate(currentTime);
+
+				// Use update() instead of insert() for updating the sheet
+				if (s.update()) {
+					response.put("success", true);
+					response.put("msg", "sheet_updated");
+				} else {
+					response.put("success", false);
+					response.put("msg", "failed");
+				}
 			}
 		} catch (Exception e) {
 			response.put("success", false);

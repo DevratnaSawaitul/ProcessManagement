@@ -21,7 +21,7 @@ function loadSkills() {
     .then(data => {
         tableBody.innerHTML = ""; // Clear table before inserting new rows
 
-        if (data.status && data.skills.length > 0) {
+        if (data.success  && data.skills.length > 0) {
             populateSkillsTable(data.skills);
         } else {
             tableBody.innerHTML = "<tr><td colspan='3'>No skills available.</td></tr>";
