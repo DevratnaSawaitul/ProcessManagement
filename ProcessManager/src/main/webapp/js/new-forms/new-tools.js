@@ -42,6 +42,7 @@ function openEditToolsModal(tool) {
 
     document.getElementById("add-tools-title").textContent = "Edit Tool";
     addToolsModal.classList.add("show");
+	saveToolsButton.disabled = false;
 
     // Load sub-processes and preselect the correct one
     loadSubProcessesForDropdown(tool.sub_process, true);

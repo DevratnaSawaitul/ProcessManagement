@@ -50,6 +50,8 @@ function openEditSubProcessModal(subProcess) {
     document.getElementById("sub-process-name").setAttribute("readonly", "true"); 
     document.getElementById("select-process").setAttribute("disabled", "true"); 
 
+	saveSubProcessButton.disabled = false;
+	
     // ✅ Only active checkbox should be editable
     document.getElementById("sub-process-is-active").removeAttribute("disabled");
 }
