@@ -28,7 +28,7 @@ public class OrganizationService {
 			JSONObject info = (JSONObject) parser.parse(request);
 			String loadType = info.get("load_type") != null ? (String) info.get("load_type") : "";
 			if ("active".equalsIgnoreCase(loadType)) {
-				processes = new Process().retrieveAllWhere(" where active='true'");
+				processes = new Process().retrieveAllWhere(" where active='true' order by process_name");
 
 				if (processes != null && processes.length > 0) {
 					for (Process s1 : processes) {
@@ -84,7 +84,7 @@ public class OrganizationService {
 				String process = info.get("process") != null ? (String) info.get("process") : "";
 				if (!process.isEmpty()) {
 					subprocesses = new Subprocesses()
-							.retrieveAllWhere(" where process_name='" + process + "' and active='true'");
+							.retrieveAllWhere(" where process_name='" + process + "' and active='true' order by subprocess_name");
 				} else {
 					response.put("success", false);
 					response.put("message", "process_name_required");
@@ -121,7 +121,7 @@ public class OrganizationService {
 				response.put("success", true);
 				response.put("sub_process", subProcess);
 			} else if ("active".equalsIgnoreCase(loadType)) {
-				subprocesses = new Subprocesses().retrieveAllWhere(" where active='true' order by subprocess_id desc");
+				subprocesses = new Subprocesses().retrieveAllWhere(" where active='true' order by subprocess_name");
 				Set<String> addedSubProcessNames = new HashSet<>();
 				if (subprocesses != null && subprocesses.length > 0) {
 					for (Subprocesses s : subprocesses) {
@@ -164,7 +164,7 @@ public class OrganizationService {
 			if ("sub_process_related".equalsIgnoreCase(loadType)) {
 				String sub_process = info.get("sub_process") != null ? (String) info.get("sub_process") : "";
 				if (!sub_process.isEmpty()) {
-					tools = new Tools().retrieveAllWhere(" where sub_process='" + sub_process + "' and active='true'");
+					tools = new Tools().retrieveAllWhere(" where sub_process='" + sub_process + "' and active='true' order by tool_name");
 				} else {
 					response.put("success", false);
 					response.put("message", "sub_process_required");
@@ -224,7 +224,7 @@ public class OrganizationService {
 			JSONObject info = (JSONObject) parser.parse(request);
 			String loadType = info.get("load_type") != null ? (String) info.get("load_type") : "";
 			if ("active".equalsIgnoreCase(loadType)) {
-				skills = new Skills().retrieveAllWhere(" where active='true'");
+				skills = new Skills().retrieveAllWhere(" where active='true' order by skill_name");
 
 				if (skills != null && skills.length > 0) {
 					for (Skills s1 : skills) {

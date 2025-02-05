@@ -76,7 +76,7 @@ function loadSubProcessesForDropdown(selectedSubProcess = "", isReadonly = false
         const subProcessDropdown = document.getElementById("select-sub-process");
         subProcessDropdown.innerHTML = `<option value="">Select Sub-Process</option>`;
 
-        if (data.status && data.sub_process.length > 0) {
+        if (data.success && data.sub_process.length > 0) {
             data.sub_process.forEach(subProcess => {
                 const option = document.createElement("option");
                 option.value = subProcess.subprocess_name;

@@ -1,82 +1,118 @@
 function loadSingleSheets(sheet) {
-    const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/showSheets"; // API endpoint
-    const jsonData = JSON.stringify({ load_type: "singleSheet",file_name:sheet });
+	const apiUrl = window.location.origin + "/ProcessManager/webapi/sheets/showSheets";
+	const jsonData = JSON.stringify({ load_type: "singleSheet", file_name: sheet });
 
-    const tableBody = document.getElementById("sheets-table-body-single-sheet");
+	fetch(apiUrl, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: jsonData
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success && data.sheets.length > 0) {
+				populateSingleTable(data.sheets);
+			} else {
+				document.getElementById("sheets-table-body-single-sheet").innerHTML =
+					"<tr><td colspan='8'>No sheets available to display.</td></tr>";
+			}
 
-    // Clear any previous rows and show a loading message
-    tableBody.innerHTML = "<tr><td colspan='8'>Loading...</td></tr>";
-
-    fetch(apiUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: jsonData,
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! success : ${response.success }`);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            // Remove loading message once data is received
-            tableBody.innerHTML = ""; // Clear the loading message
-
-            if (data.success  === true && data.sheets.length > 0) {
-                populateSingleTable(data.sheets);
-            } else {
-                tableBody.innerHTML =
-                    "<tr><td colspan='8'>No sheets available to display.</td></tr>";
-            }
-        })
-        .catch((error) => {
-            console.error("Error fetching sheets data:", error);
-            tableBody.innerHTML = `<tr><td colspan='8'>Error: ${error.message}</td></tr>`;
-        });
+			if (data.sheet_process && data.sheet_process.length > 0) {
+				populateSheetProcesses(data.sheet_process);
+			} else {
+				document.getElementById("sheet-process-container").innerHTML =
+					"<p>No processes found. Click 'Add Process' to create one.</p>";
+			}
+		})
+		.catch(error => console.error("Error fetching sheet data:", error));
 }
 
-/**
- * Populates the table with the fetched sheet data.
- * @param {Array} sheets - Array of sheet objects returned from the API.
- */
 function populateSingleTable(sheets) {
-    const tableBody = document.getElementById("sheets-table-body-single-sheet");
-    sheets.forEach((sheet) => {
-        // Parse the date fields and format them if needed
-        const formattedDate = formatDateSingle(sheet.date);
-        const formattedLastUpdated = formatDateSingle(sheet.date_of_last_update);
+	const tableBody = document.getElementById("sheets-table-body-single-sheet");
+	tableBody.innerHTML = "";
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${sheet.file_name}</td>
-            <td>${sheet.design_no}</td>
-            <td>${sheet.department}</td>
-            <td>${sheet.floor}</td>
-            <td>${formattedDate}</td>  <!-- Use formatted date here -->
-            <td>${sheet.last_updated_by}</td>
-            <td>${formattedLastUpdated}</td> <!-- Use formatted last update date here -->
-            <td>${sheet.version}</td>
-        `;
-        tableBody.appendChild(row);
-    });
+	sheets.forEach(sheet => {
+		tableBody.innerHTML += `
+            <tr>
+                <td>${sheet.file_name}</td>
+                <td>${sheet.design_no}</td>
+                <td>${sheet.department}</td>
+                <td>${sheet.floor}</td>
+                <td>${sheet.date}</td>
+                <td>${sheet.last_updated_by}</td>
+                <td>${sheet.date_of_last_update}</td>
+                <td>${sheet.version}</td>
+            </tr>`;
+	});
 }
 
-// Helper function to format the date properly
-function formatDateSingle(dateString) {
-    // Handle edge cases for date formatting
-    if (!dateString || dateString === '01-01-1') {
-        return "N/A"; // Return 'N/A' for invalid or placeholder dates
-    }
-    const date = new Date(dateString);
-    if (isNaN(date)) {
-        return dateString; // If it's an invalid date, return the original string
-    }
+function populateSheetProcesses(sheetProcesses) {
+	const container = document.getElementById("sheet-process-container");
+	container.innerHTML = "";
 
-    // Format the date to 'dd-mm-yyyy' format
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
+	sheetProcesses.forEach(process => {
+		let stepsHtml = "";
+		if (process.steps.length > 0) {
+			process.steps.forEach(step => {
+				stepsHtml += `
+                    <tr>
+                        <td>${step.step_number}</td>
+						<td>${step.subprocess_name}</td>
+                        <td>${step.tool_name}</td>
+                        <td>${step.tool_spec}</td>
+                        <td>${step.skill}</td>
+                        <td>${step.time_minutes} min</td>
+                        <td class="shrink">
+						<span class="action-btn eye-btn" onclick="alert('Tool Details: ${step.tool_name}, Spec: ${step.tool_spec}, Skill: ${step.skill}, Instructions: ${step.special_instruction}')">
+						    <font face="Arial">&#128065;</font> <!-- 👁 Eye Icon -->
+						</span>
+						<span class="action-btn edit-btn" onclick="alert('Edit Step ${step.step_number}')">
+						    <font face="Arial">&#x270E;</font> <!-- ✎ Edit Icon -->
+						</span>
+						<span class="action-btn delete-btn" onclick="alert('Delete Step ${step.step_number}')">
+						    <font face="Arial">&#x1F5D1;</font> <!-- 🗑️ Trash Icon -->
+						</span>
+                        </td>
+                    </tr>`;
+			});
+		} else {
+			stepsHtml = `<tr><td colspan="7">No Steps Found</td></tr>`;
+		}
+
+		container.innerHTML += `
+            <div class="sheet-process">
+                <div class="process-header" onclick="toggleSteps('steps-${process.sheet_process_id}')">
+                    <span class="toggle-icon">&#9660;</span>
+                    <span>${process.process_name}</span>
+                    <button class="add-btn" title="Add Step in the Process" onclick="alert('Add New Step Clicked')">+ New Step</button>
+                </div>
+                <table id="steps-${process.sheet_process_id}" class="steps-table">
+                    <thead>
+                        <tr>
+                            <th>Step No</th>
+							<th>Sub Process</th>
+                            <th>Tool Name</th>
+                            <th>Tool Spec</th>
+                            <th>Skill</th>
+                            <th>Time</th>
+                            <th class="shrink">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${stepsHtml}
+                    </tbody>
+                </table>
+            </div>`;
+	});
+}
+
+function toggleSteps(tableId) {
+	const allTables = document.querySelectorAll(".steps-table");
+	allTables.forEach(table => {
+		if (table.id !== tableId) {
+			table.style.display = "none";
+		}
+	});
+
+	const table = document.getElementById(tableId);
+	table.style.display = table.style.display === "none" ? "table" : "none";
 }

@@ -66,7 +66,7 @@ function populateSheetTable(sheets) {
 		// Show alert and open single sheet view on row click
 		row.addEventListener("click", (event) => {
 			if (!event.target.closest(".action-btn")) {
-				alert(`Sheet ID: ${sheet.sheet_id}`);
+				alert(`Loading a Sheet ID: ${sheet.sheet_id}`);
 
 				// Show the single sheet content view
 				showView('single-sheet-content');

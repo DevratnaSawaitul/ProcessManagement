@@ -76,7 +76,7 @@ function loadProcessesForDropdown(selectedProcess = "", isReadonly = false) {
         const processDropdown = document.getElementById("select-process");
         processDropdown.innerHTML = `<option value="">Select Process</option>`;
         
-        if (data.status && data.processes.length > 0) {
+        if (data.success && data.processes.length > 0) {
             data.processes.forEach(process => {
                 const option = document.createElement("option");
                 option.value = process.process_name;
